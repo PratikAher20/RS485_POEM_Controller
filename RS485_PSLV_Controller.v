@@ -116,13 +116,14 @@ module transmitter_with_detector(
     input clk,
     input Rx,
     input [15:0] byte_in,
+    output wire Tx_complete,
     output reg Tx_Enable,
     output wire Tx
 );
 
     reg reset;
     wire sequence_detected;
-    wire tx_complete;
+    // wire Tx_complete;
     wire tx_en;
     wire rst;
 
