@@ -126,11 +126,12 @@ module Rx_Controller_tb;
     reg rst;
     reg Rx;
     wire Tx_Enable;
-    reg [7:0] byte_in;
+    // reg [7:0] byte_in;
     wire data_out;
+    reg[15:0] data = 16'h3fe0;
     // RS485_PSLV_Controller c1(clk, Tx);
 // sequence_detector s1(clk, rst, Rx, Tx_Enable);
-    transmitter_with_detector dut(clk, Rx, byte_in, Tx_Enable, data_out);
+    transmitter_with_detector dut(clk, Rx, data, Tx_Enable, data_out);
 
     initial begin
         $dumpfile("RS485_PSLV_Controller.vcd"); 
