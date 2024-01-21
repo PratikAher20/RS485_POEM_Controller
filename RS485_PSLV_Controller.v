@@ -1,6 +1,4 @@
 
-////////////////////
-
 module Tx_Controller(input wire clk, input wire seq_detect, input[15:0] data_in, output reg Tx_Enable, output reg Tx, output reg Tx_complete); 
 
     // reg[15:0] data = data_in;
@@ -84,6 +82,24 @@ module Tx_Controller(input wire clk, input wire seq_detect, input[15:0] data_in,
 
 endmodule
 
+module baud_clk(input i_clk, output reg o_clock);
+    
+    reg[4:0] count;
+    initial count = 0;
+    initial o_clock = 1;
+
+    always @(posedge i_clk) begin
+        count = count + 1;
+        if(count == 25) begin     // Choose the value of count for changing the 
+            o_clock = ~o_clock;   // baud clock given the master clock.  
+            count = 0;
+
+        end
+    end
+        
+
+endmodule
+
 
 module sequence_detector(
     input clk,
@@ -91,25 +107,48 @@ module sequence_detector(
     input Rx,
     output reg detected
 );
+    
+    reg sync_flag =0;
+    function [7:0]shifter(input reg [7:0] Slave_Addr);
+    
+        integer i;
+        for (i = 0;i<8;i = i + 1) begin
+            shifter[7-i] = Slave_Addr[i];
+        end
+        
+    endfunction
 
     parameter Slave_Addr = 8'h01;
-    // reg seq = {1'b0, Slave_Addr, 1'b1, 1'b1};
+    parameter slave_addr = shifter(Slave_Addr);
+    reg[10:0] seq = {1'b0, slave_addr, 1'b1, 1'b1};
     reg [10:0] state = 0;  // State register to store the current sequence
+    wire o_clock;
 
-    always @(posedge clk or posedge reset) begin
-        if (reset) begin
-            state <= 0;
-            detected <= 0;
-        end else begin
+    baud_clk b1(.i_clk(clk), .o_clock(o_clock));
+
+    always @(negedge  Rx) begin
+        if(sync_flag == 0)begin
+            state <= {state[9:0], Rx};
+            sync_flag = 1;
+        end
+    end
+
+    always @(posedge clk) begin
+        // if (sync_flag == 0 && Rx == 0) begin
+        //     detected <= 0;
+        //     sync_flag = 1;
+        // end else begin
+        if(sync_flag)begin
             state <= {state[9:0], Rx};  // Shift in the new input bit
-            if (state == 11'b01000000011) begin  // Check if the sequence is detected
+            if (state == seq) begin  // Check if the sequence is detected
                 detected <= 1;
+                sync_flag = 0;
             end else begin
                 detected <= 0;
             end
         end
+        // end
     end
-
 endmodule
 
 module transmitter_with_detector(
@@ -117,22 +156,21 @@ module transmitter_with_detector(
     input Rx,
     input [15:0] byte_in,
     output wire Tx_complete,
-    output reg Tx_Enable,
+    output wire Tx_Enable,
     output wire Tx
 );
 
     reg reset;
     wire sequence_detected;
     // wire Tx_complete;
-    wire tx_en;
     wire rst;
 
     initial reset = 0;
-    initial Tx_Enable = 0;
+    // initial Tx_Enable = 0;
     
-    sequence_detector detector(clk, reset, Rx, sequence_detected);
+    sequence_detector detector(.clk(clk), .reset(reset), .Rx(Rx), .detected(sequence_detected));
 
-    Tx_Controller t1(clk, sequence_detected, byte_in, tx_en, Tx, Tx_complete);
+    Tx_Controller t1(.clk(clk), .seq_detect(sequence_detected), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
 
 
 endmodule
