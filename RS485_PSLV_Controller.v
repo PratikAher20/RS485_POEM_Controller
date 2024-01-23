@@ -12,7 +12,8 @@ module Tx_Controller(input wire clk, input wire seq_detect, input[15:0] data_in,
      initial Tx_Enable = 0;
 
     always @ (posedge seq_detect) begin
-
+        // repeat(1)
+        //     @(posedge clk);
         Tx_Enable = 1;
 
     end
@@ -60,8 +61,8 @@ module Tx_Controller(input wire clk, input wire seq_detect, input[15:0] data_in,
                     20 : tx_reg <= data_in[15];
                     21 : tx_reg <= 0;
                     22 : tx_reg <= 1;
-                    23 : begin
-                        assign rst = 1;
+                    24 : begin
+                        rst <= 1;
                         i_tx = 0;
                         Tx_complete <= 1;
                         Tx_Enable = 0;
@@ -76,7 +77,7 @@ module Tx_Controller(input wire clk, input wire seq_detect, input[15:0] data_in,
                 rst = 0;
             end
         end
-        assign Tx = tx_reg;
+        Tx = tx_reg;
     end
 
 
@@ -157,11 +158,12 @@ module transmitter_with_detector(
     input [15:0] byte_in,
     output wire Tx_complete,
     output wire Tx_Enable,
-    output wire Tx
+    output wire Tx,
+    output sequence_detected
 );
 
     reg reset;
-    wire sequence_detected;
+    // wire sequence_detected;
     // wire Tx_complete;
     wire rst;
 

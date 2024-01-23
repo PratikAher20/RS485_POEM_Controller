@@ -29,14 +29,15 @@ initial begin
     #0 PENABLE = 0;
 
     #10 PWRITE = 1;
+    #0 PWDATA = 16'h3fe0;
     #0 PSEL = 1;
     #0 PADDR = 8'h00;
-    #2 PENABLE = 1;
-    #0 PWDATA = 16'h3fe0;
+    #10 PENABLE = 1;
+    
 end
 
 initial begin
-    #25 PWRITE = 0;
+    #30 PWRITE = 0;
     #0 PSEL = 0;
     #0 PENABLE = 0;
 end
