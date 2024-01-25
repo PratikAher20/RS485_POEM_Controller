@@ -43,10 +43,10 @@ initial begin
 end
 
 initial begin
-    #30 PADDR = 8'h04;
-    #5 PSEL = 1;
-    #0 PWRITE = 0;
-    #2 PENABLE = 1;
+    // #30 PADDR = 8'h04;
+    // #5 PSEL = 1;
+    // #0 PWRITE = 0;
+    // #2 PENABLE = 1;
 end
 
 //Rx Waveforms

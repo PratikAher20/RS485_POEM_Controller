@@ -1,4 +1,3 @@
-
 `include "RS485_PSLV_Controller.v"
 
 module RS_485_Controller(
@@ -10,9 +9,10 @@ input PWRITE,
 input[7:0] PADDR,
 input [15:0] PWDATA,
 input Rx,
-input [15:0] data_out,
 
-inout wire [3:0] count,
+output [15:0] data_out,
+
+
 
 output wire full,
 output reg PREADY,
@@ -34,6 +34,7 @@ output wire seq_detect
 // wire byte_out;
 // wire full;
 // wire empty;
+wire [3:0] count;
 
 reg[15:0] data_temp_in = 15'b0;
 wire[15:0] data_in;
@@ -67,13 +68,14 @@ assign rd_enable = (PENABLE && !PWRITE && PSEL);
 
 
 transmitter_with_detector tx_detect(.clk(PCLK), .Rx(Rx), .byte_in(byte_in), .Tx_complete(Tx_complete), .Tx_Enable(Tx_Enable) , .Tx(Tx), .sequence_detected(seq_detect));
-fifo f1(PCLK, enable, rd, wr, PRESETN, data_in, data_out, empty, full, count);
+fifo f1(.clk(PCLK), .enable(enable), .rd(rd), .wr(wr), .rst(PRESETN), .data_in(data_in), .data_out(data_out), .empty(empty), .full(full), .count(count));
 
 // integer i;
 
-always@ (posedge wr_enable)
+always@ (wr_enable)
 begin
 
+    if(wr_enable == 1) begin
     PREADY = 1;
 
     if(PRESETN == 0)
@@ -90,12 +92,18 @@ begin
        data_temp_in <= PWDATA;
         // fill_data(PWDATA, data_in);
         wr = 1;
-        
+       
+        repeat(2)
+            @(posedge PCLK);
+        wr = 0;
+
         // Add a delay so that the write completes and then next write can be started.
     end
 
     if(PADDR == 8'h08)
         enable = PWDATA;   //TO enable the FIFO
+
+    end
 
 end
 
@@ -103,8 +111,7 @@ assign data_in = data_temp_in;
 
 always @ (posedge rd_enable)
 begin
-    
-    PREADY = 1;
+   
 
     if(PADDR == 8'h04)
     begin
@@ -123,30 +130,35 @@ end
 
 integer i;
 
-always @ (posedge Tx_Enable) begin
+always @ (Tx_Enable) begin
                                 // Send two packets to Transmitter_Detector Module when the Tx_Complete signal is received.
+      if(Tx_Enable == 1)begin
         repeat(1)
             @(posedge PCLK);
         rd = 1;
         repeat(1)
             @(posedge PCLK);
-        byte_temp_in <= data_out[15:0];  //Data out from FIFO going into Tx&Detect.
+        byte_temp_in <= data_out;  //Data out from FIFO going into Tx&Detect.
         // rd = 0;  // Check for the delay;
+        repeat(2)
+            @(posedge PCLK);
+        rd = 0;
+        end
 end
 
 assign byte_in = byte_temp_in;
 
-always @(posedge Tx_complete) begin
-        rd = 0;
-end
+//always @(posedge Tx_complete) begin
+ //       rd = 0;
+//end
 
 
-always @(negedge PWRITE) begin
+//always @(negedge PWRITE) begin
 
     // @(posedge PCLK)
-        wr = 0;
-    
-end
+        //wr = 0;
+   
+//end
 
 
 endmodule
@@ -176,22 +188,21 @@ always @(posedge clk) begin
         //     readCount = 0;
         //     writeCount = 0;
         // end
-        // else 
+        // else
     if (rd == 1 && count != 0) begin
-    
-        data_out[15:0] <= FIFO[readCount];
+        data_out <= FIFO[readCount];
         repeat(21)
             @(posedge clk);
-        readCount = readCount + 1;
+        readCount <= readCount + 1;
     end
     else if (wr == 1 && count < 16) begin
         FIFO[writeCount] <= data_in;
-        writeCount = writeCount + 1;
+        writeCount <= writeCount + 1;
     end
-        
+       
         // else;
     // end
-    
+   
     if(writeCount == 16)
         writeCount = 0;
     else if(readCount == 16)
@@ -205,8 +216,7 @@ always @(posedge clk) begin
     else if( writeCount > readCount)
         count = writeCount - readCount;
     else;
-    
+   
 end
 
 endmodule
-
