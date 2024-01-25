@@ -8,7 +8,10 @@ module Tx_Controller(input wire clk, input wire seq_detect, input[15:0] data_in,
     reg rst;
     initial rst = 0;
     initial Tx_complete = 0;
-     initial Tx_Enable = 0;
+    initial Tx_Enable = 0;
+    wire o_clock;
+
+    baud_clk b1(.i_clk(clk), .o_clock(o_clock));
 
     always @ (seq_detect) begin
         // repeat(1)
@@ -23,7 +26,7 @@ module Tx_Controller(input wire clk, input wire seq_detect, input[15:0] data_in,
 
     end
        
-    always @(clk) begin
+    always @(o_clock) begin
 
        if(clk == 1) begin
         if(Tx_Enable == 1) begin
@@ -149,7 +152,7 @@ module sequence_detector(
         end
     end
 
-    always @(posedge clk) begin
+    always @(posedge o_clock) begin
         // if (sync_flag == 0 && Rx == 0) begin
         //     detected <= 0;
         //     sync_flag = 1;
