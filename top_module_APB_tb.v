@@ -3,7 +3,6 @@
 module top_module_APB_tb;
 
 reg PCLK;
-reg PRESETN;
 reg PSEL;
 reg PENABLE;
 reg PWRITE;
@@ -17,7 +16,7 @@ wire [7:0] PRDATA;
 wire Tx;
 wire Tx_Enable;
 
-RS_485_Controller rc1(.PCLK(PCLK), .PRESETN(PRESETN), .PSEL(PSEL), .PENABLE(PENABLE), .PWRITE(PWRITE), .PADDR(PADDR), .PWDATA(PWDATA), .Rx(Rx), .PREADY(PREADY), .PRDATA(PRDATA), .Tx(Tx), .Tx_Enable(Tx_Enable));
+RS_485_Controller rc1(.PCLK(PCLK), .PSEL(PSEL), .PENABLE(PENABLE), .PWRITE(PWRITE), .PADDR(PADDR), .PWDATA(PWDATA), .Rx(Rx), .PREADY(PREADY), .PRDATA(PRDATA), .Tx(Tx), .Tx_Enable(Tx_Enable));
 
 
 initial begin   
@@ -28,7 +27,7 @@ initial begin
     #0 PSEL = 0;
     #0 PENABLE = 0;
 
-    #10 PWRITE = 1;
+    #15 PWRITE = 1;
     #0 PWDATA = 16'h3fe0;
     #0 PSEL = 1;
     #0 PADDR = 8'h00;
@@ -37,16 +36,15 @@ initial begin
 end
 
 initial begin
-    #30 PWRITE = 0;
-    #0 PSEL = 0;
+    #55 PSEL = 0;
     #0 PENABLE = 0;
 end
 
 initial begin
-    // #30 PADDR = 8'h04;
-    // #5 PSEL = 1;
-    // #0 PWRITE = 0;
-    // #2 PENABLE = 1;
+    #65 PADDR = 8'h04;
+    #0 PSEL = 1;
+    #0 PWRITE = 0;
+    #10 PENABLE = 1;
 end
 
 //Rx Waveforms
