@@ -2,12 +2,13 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
 
     // reg[15:0] data = data_in;
     reg tx_reg = 1;
-    integer i_tx = 0;
+    reg[31:0] i_tx = 32'h00000000;
     // initial Tx = 1;
     // reg rst;
     // initial rst = 0;
     initial Tx_complete = 0;
     reg tx_enable = 0;
+    initial tx_enable = 0;
     // initial Tx_Enable = 0;
     wire o_clock;
 
@@ -18,21 +19,22 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
         if(!rst) begin
             tx_reg <= 1;
             tx_enable <= 0;
-            // i_tx <= 0;
+            i_tx = 0;
         end
 
         else begin
 
             if(seq_detect == 1)begin
+                repeat(4)
+                    @(posedge clk);
 
                 tx_enable <= 1;
 
-                // repeat(24)
-                //     @(posedge clk);
-                // tx_enable <= 0;
             end
 
+
             if(tx_enable == 1) begin
+
                   
                 i_tx = i_tx + 1;
 
@@ -44,6 +46,8 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
                     // end
                     // 0 : i_tx = i_tx + 1;
                     1 : begin
+                        repeat(2)
+                            @(posedge clk);
                         Tx_complete <= 0;
                         tx_reg <= 0;
                     end
@@ -70,13 +74,17 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
                     22 : tx_reg <= 1;
                     23 : begin
                         // rst <= 1;
-                        i_tx <= 0;
+                        i_tx = 32'h00000000;
                         Tx_complete <= 1;
                         tx_enable <= 0;
                     end
 
                     default: tx_reg <= 1;
                 endcase
+            end
+
+            else begin
+                tx_reg <= 1;
             end
         end
     end
@@ -93,7 +101,7 @@ module baud_clk(input i_clk, output wire o_clk);
 
     always @(posedge i_clk) begin
         count <= count + 5'd1;
-        if(count >= 6'd50 - 6'd1) begin     // Choose the value of count for changing the
+        if(count >= 6'd24) begin     // Choose the value of count for changing the
             o_clock <= ~o_clock;   // baud clock given the master clock.  
             count <= 6'd0;
 
@@ -109,11 +117,13 @@ module sequence_detector(
     input clk,
     input reset,
     input Rx,
-    output reg detected,
+    output wire detected,
     output reg[10:0] state
 );
    
     reg sync_flag =0;
+    reg detect = 1'b0;
+
     function [7:0]shifter(input reg [7:0] Slave_Addr);
    
         integer i;
@@ -140,12 +150,12 @@ module sequence_detector(
         end
         else begin
             if(state == seq) begin
-                sync_flag <= 0;
+                //sync_flag <= 0;
             end
         end
     end
 
-    always @(posedge o_clock) begin
+    always @(posedge clk) begin
         // if (sync_flag == 0 && Rx == 0) begin
         //     detected <= 0;
         //     sync_flag = 1;
@@ -154,14 +164,16 @@ module sequence_detector(
         if(sync_flag)begin
             state <= {state[9:0], Rx};  // Shift in the new input bit
             if (state == seq) begin  // Check if the sequence is detected
-                detected <= 1;
+                detect <= 1'b1;
                 //sync_flag <= 0;
             end else begin
-                detected <= 0;
+                detect <= 1'b0;
             end
         end
         // end
     end
+
+    assign detected = detect;
 endmodule
 
 module transmitter_with_detector(
@@ -185,7 +197,7 @@ module transmitter_with_detector(
    
     sequence_detector detector(.clk(clk), .reset(reset), .Rx(Rx), .detected(sequence_detected), .state(state));
 
-    Tx_Controller t1(.clk(clk), .seq_detect(sequence_detected), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
+    Tx_Controller t1(.clk(clk), .seq_detect(sequence_detected), .rst(rst_tx), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
 
 
 endmodule
