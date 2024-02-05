@@ -1,22 +1,26 @@
-`include "RS485_PSLV_Controller.v"
-
 module RS_485_Controller(
 input PCLK,
 input PSEL,
 input PENABLE,
 input PWRITE,
-input[8:0] PADDR,
+input[7:0] PADDR,
 input [15:0] PWDATA,
-input wire Tx_Enable,
+input rst_tx,
 input wire full,
-input [3:0]count,
 input wire empty,
-input [15:0] data_out,
+input wire[8:0] count,
+input seq_detect,
+input Tx_Enable,
+
+output [15:0] data_out,
 
 
-output [15:0] data_in,
+
+output wire [15:0] data_in,
 output reg PREADY,
 output reg[7:0] PRDATA,
+output Tx,
+
 output reg rd, wr, enable,
 output wire[15:0] byte_in
 
@@ -31,8 +35,6 @@ output wire[15:0] byte_in
 // wire byte_out;
 // wire full;
 // wire empty;
-
-reg fifo_reg = 1'b1;
 
 reg[15:0] data_temp_in = 15'b0;
 // inout wire [3:0] count;
@@ -57,151 +59,81 @@ reg [15:0] byte_temp_in = 15'b0;
 
 // inout wire full;
 
+wire tx_en = 0;
 
-
+assign tx_en = Tx_Enable;
 wire wr_enable, rd_enable;
 assign wr_enable = (PENABLE && PWRITE && PSEL);
 assign rd_enable = (PENABLE && !PWRITE && PSEL);
 
 
-//transmitter_with_detector tx_detect(.clk(PCLK), .det(det), .sequence_detected(seq_detect));
-//fifo f1(.clk(PCLK), .enable(enable), .rd(rd), .wr(wr), .rst(fifo_reg), .data_in(data_in), .data_out(data_out), .empty(empty), .full(full), .count(count));
+//transmitter_with_detector tx_detect(.clk(PCLK), .Rx(Rx), .rst_tx(rst_tx), .byte_in(byte_in), .Tx_complete(Tx_complete), .Tx_Enable(Tx_Enable) , .Tx(Tx), .sequence_detected(seq_detect));
+//fifo f1(.clk(PCLK), .r_en(rd), .w_en(wr), .rst_n(rst_tx), .data_in(data_in), .data_out(data_out), .empty(empty), .full(full), .count(count));
 
 // integer i;
 
 always @(posedge PCLK) begin
-    if(wr_enable)begin
-        PREADY = 1;
+    if(!rst_tx) begin
+        wr = 0;
+        
+    end
 
-        if(PADDR == 9'h00)
+    else begin
+        if(wr_enable)begin
+        PREADY = 1;
+        if(PADDR == 8'h00)
         begin
             // for (i = 0; i<16; i++ ) begin
             //     data_in[i] <= PWDATA[i];
             // end
-           data_temp_in <= PWDATA;
+            data_temp_in <= PWDATA;
             // fill_data(PWDATA, data_in);
             wr = 1;
-           
+        
             repeat(2)
                 @(posedge PCLK);
             wr = 0;
             PREADY = 0;
-
-            // Add a delay so that the write completes and then next write can be started.
-        end
-
-        if(PADDR == 9'h04) begin
-            PREADY = 1;
-            enable <= PWDATA;   //TO enable the FIFO
-            repeat(2)
-                @(posedge PCLK);
-            PREADY = 0;
-
-        end
-
-
-        if(PADDR == 9'h14) begin
-            PREADY = 1;
-            fifo_reg <= PWDATA;   
-            repeat(2)
-                @(posedge PCLK);
-            PREADY = 0;
-
         end
     end
-
     else if(rd_enable) begin
-        if(PADDR == 9'h08)
-            begin
-                PREADY = 1;
-                repeat(2)
-                    @(posedge PCLK)
-                PRDATA = count;   // Return the number of empty bytes from the queue.
-                PREADY = 0;
-            end
-        if(PADDR == 9'h0C) begin
-                PREADY = 1;
-                    repeat(2)
-                        @(posedge PCLK)
-                PRDATA = 8'hAB;
-                PREADY = 0;
-            end
-        if(PADDR == 9'h10) begin
-                PREADY = 1;
-                    repeat(2)
-                        @(posedge PCLK)
-                PRDATA = wr_enable;
-                PREADY = 0;
-
-        end
-    end
-end
-
-assign data_in = data_temp_in;
-
-
-always@ (wr_enable)
-begin
-
-   if(wr_enable == 1) begin
-    PREADY = 1;
-
-    if(PADDR == 8'h00)
+        
+        if(PADDR == 8'h08)
         begin
-         //for (i = 0; i<16; i++ ) begin
-          //  data_in[i] <= PWDATA[i];
-         //end
-       data_temp_in <= PWDATA;
-         //fill_data(PWDATA, data_in);
-        wr = 1;
-       
-        repeat(2)
-            @(posedge PCLK);
-        wr = 0;
-        PREADY = 0;
+            PREADY = 1;
+            repeat(2)
+                @(posedge PCLK)
+            PRDATA = count;   // Return the number of empty bytes from the queue.
+            PREADY = 0;
+            
+        end
 
-        // Add a delay so that the write completes and then next write can be started.
+        if(PADDR == 8'h0C)
+        begin
+            PREADY = 1;
+            repeat(2)
+                @(posedge PCLK)
+            PRDATA = 8'hAB;   // Return the number of empty bytes from the queue.
+            PREADY = 0;
+            
+        end
+
     end
-
-    if(PADDR == 8'h08)
-        enable = PWDATA;   //TO enable the FIFO
-
     end
-
+    
 end
 
 assign data_in = data_temp_in;
-
-always @ (rd_enable) begin
-
-if(rd_enable == 1) begin
-
-    if(PADDR == 8'h04)
-    begin
-        PREADY = 1;
-        PRDATA = count;   // Return the number of empty bytes from the queue.
-        repeat(1)
-            @(posedge PCLK)
-        PREADY = 0;
-    end
-
-     //else if(PADDR == 8'h08) begin   //Tells if the FIFO is empty
-     //    PRDATA = empty;
-     //end
-
-    else if(PADDR == 8'h0C) begin   // Tells if the FIFO is full
-        PRDATA = full;
-    end
-
-end
-
-end
 
 integer i;
 
-always @ (Tx_Enable) begin
+always @ (seq_detect) begin
                                 // Send two packets to Transmitter_Detector Module when the Tx_Complete signal is received.
-      if(Tx_Enable == 1)begin
+    if(!rst_tx)begin
+        rd = 0;
+    end
+    else begin
+        if(seq_detect == 1)begin
         repeat(1)
             @(posedge PCLK);
         rd = 1;
@@ -209,10 +141,12 @@ always @ (Tx_Enable) begin
             @(posedge PCLK);
         byte_temp_in <= data_out;  //Data out from FIFO going into Tx&Detect.
         // rd = 0;  // Check for the delay;
-        repeat(2)
+        repeat(1)
             @(posedge PCLK);
         rd = 0;
         end
+    end
+      
 end
 
 assign byte_in = byte_temp_in;
@@ -234,61 +168,47 @@ endmodule
 
 
 
-module fifo(clk, enable, rd, wr, rst, data_in, data_out, empty, full, count);
-
-input clk, enable, rst, rd, wr;
-input [15:0] data_in;
-output reg [15:0] data_out;
-output wire empty;
-output wire full;
-
-output reg [3:0] count;
-initial count = 0;
-reg [15:0] FIFO [0:15];     //Can store 16 packets of 2 byte data = Total 32 bytes
-reg [3:0] readCount = 0, writeCount = 0;
-
-assign empty = (count == 0) ? 1'b1 : 1'b0;
-assign Full = (count == 8) ? 1'b1 : 1'b0;
-
-always @(posedge clk) begin
-    if(enable == 0);
-    else begin
-        if(!rst) begin    // Using Active High Reset as done by APB Bus.
-            readCount <= 0;
-           writeCount <= 0;
-          end
-        else
-        if (rd == 1 && count != 0) begin
-            data_out <= FIFO[readCount];
-            repeat(21)
-                @(posedge clk);
-            readCount <= readCount + 1;
-        end
-        else if (wr == 1 && count < 16) begin
-            FIFO[writeCount] <= data_in;
-            writeCount <= writeCount + 1;
-        end
-       
-         else;
-     end
-   
-    if(writeCount == 16)
-        writeCount = 0;
-    else if(readCount == 16)
-        readCount = 0;
-    else;
-
-    if(readCount > writeCount) begin
-        count <= readCount - writeCount;
-
+module fifo (
+  input clk, rst_n,
+  input w_en, r_en,
+  input [15:0] data_in,
+  output wire [15:0] data_out,
+  output full, empty,
+  output wire [8:0] count
+);
+  
+  reg [8:0] w_ptr, r_ptr;
+  reg [15:0] fifo[0:511];
+  reg [15:0] data_out_temp;
+  
+  // Set Default values on reset.
+  always@(posedge clk) begin
+    if(!rst_n) begin
+      w_ptr <= 0; r_ptr <= 0;
+      data_out_temp <= 0;
     end
-    else if( writeCount > readCount)
-        count <= writeCount - readCount;
-    else;
-   
-end
 
+    if(w_en & !full)begin
+      fifo[w_ptr] <= data_in;
+      w_ptr <= w_ptr + 1;
+    end
+
+    if(r_en & !empty) begin
+      data_out_temp <= fifo[r_ptr];
+      r_ptr <= r_ptr + 1;
+    end
+
+    if(w_ptr == 9'd511)
+        w_ptr <= 0;
+
+    if(r_ptr == 9'd511)
+        r_ptr <= 0;
+
+  end
+
+  
+  assign data_out = data_out_temp;
+  assign count = (w_ptr > r_ptr) ? w_ptr - r_ptr: r_ptr - w_ptr;
+  assign full = ((w_ptr+1'b1) == r_ptr);
+  assign empty = (w_ptr == r_ptr);
 endmodule
-
-
-
