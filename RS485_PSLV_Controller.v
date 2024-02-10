@@ -178,6 +178,7 @@ endmodule
 
 module transmitter_with_detector(
     input clk,
+    input valid,
     input Rx,
     input [15:0] byte_in,
     output wire Tx_complete,
@@ -197,7 +198,7 @@ module transmitter_with_detector(
    
     sequence_detector detector(.clk(clk), .reset(reset), .Rx(Rx), .detected(sequence_detected), .state(state));
 
-    Tx_Controller t1(.clk(clk), .seq_detect(sequence_detected), .rst(rst_tx), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
+    Tx_Controller t1(.clk(clk), .valid(valid), .seq_detect(sequence_detected), .rst(rst_tx), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
 
 
 endmodule

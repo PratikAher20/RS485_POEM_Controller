@@ -8,15 +8,17 @@ input [15:0] PWDATA,
 input rst_tx,
 input wire full,
 input wire empty,
-input wire[8:0] count,
+input wire[3:0] count,
 input seq_detect,
-input Tx_Enable,
+input Tx_complete,
 
 output [15:0] data_out,
 
 
 
 output wire [15:0] data_in,
+output reg [7:0] ram_waddr,
+output reg [7:0] ram_raddr,
 output reg PREADY,
 output reg[7:0] PRDATA,
 output Tx,
@@ -59,9 +61,6 @@ reg [15:0] byte_temp_in = 15'b0;
 
 // inout wire full;
 
-wire tx_en = 0;
-
-assign tx_en = Tx_Enable;
 wire wr_enable, rd_enable;
 assign wr_enable = (PENABLE && PWRITE && PSEL);
 assign rd_enable = (PENABLE && !PWRITE && PSEL);
@@ -75,6 +74,7 @@ assign rd_enable = (PENABLE && !PWRITE && PSEL);
 always @(posedge PCLK) begin
     if(!rst_tx) begin
         wr = 0;
+        ram_waddr <= 7'b0000000;
         
     end
 
@@ -87,10 +87,10 @@ always @(posedge PCLK) begin
             //     data_in[i] <= PWDATA[i];
             // end
             data_temp_in <= PWDATA;
+            ram_waddr <= ram_waddr + 1'b1;
             // fill_data(PWDATA, data_in);
             wr = 1;
-        
-            repeat(2)
+            repeat(1)
                 @(posedge PCLK);
             wr = 0;
             PREADY = 0;
@@ -127,33 +127,41 @@ assign data_in = data_temp_in;
 
 integer i;
 
-always @ (seq_detect) begin
+//always @ (seq_detect) begin
                                 // Send two packets to Transmitter_Detector Module when the Tx_Complete signal is received.
-    if(!rst_tx)begin
-        rd = 0;
+   // if(!rst_tx)begin
+      //  rd = 1;
+     //   ram_raddr <= 7'b0000000;
+   // end
+   // else begin
+       // if(seq_detect == 1)begin
+        //repeat(1)
+          //  @(posedge PCLK);
+
+        //ram_raddr <= ram_raddr + 1'b1;
+       // repeat(1)
+           // @(posedge PCLK);
+        //byte_temp_in <= data_out;  //Data out from FIFO going into Tx&Detect.
+        // rd = 0;  // Check for the delay;
+        //repeat(1)
+          //  @(posedge PCLK);
+       // rd = 0;
+     //   end
+   // end
+      
+//end
+
+//assign byte_in = byte_temp_in;
+
+always @(posedge Tx_complete) begin
+     if(!rst_tx)begin
+        rd = 1;
+        ram_raddr <= 7'b0000000;
     end
     else begin
-        if(seq_detect == 1)begin
-        repeat(1)
-            @(posedge PCLK);
-        rd = 1;
-        repeat(1)
-            @(posedge PCLK);
-        byte_temp_in <= data_out;  //Data out from FIFO going into Tx&Detect.
-        // rd = 0;  // Check for the delay;
-        repeat(1)
-            @(posedge PCLK);
-        rd = 0;
-        end
+        ram_raddr <= ram_raddr + 1'b1;
     end
-      
 end
-
-assign byte_in = byte_temp_in;
-
-//always @(posedge Tx_complete) begin
- //       rd = 0;
-//end
 
 
 //always @(negedge PWRITE) begin
@@ -174,11 +182,11 @@ module fifo (
   input [15:0] data_in,
   output wire [15:0] data_out,
   output full, empty,
-  output wire [8:0] count
+  output wire [3:0] count
 );
   
-  reg [8:0] w_ptr, r_ptr;
-  reg [15:0] fifo[0:511];
+  reg [3:0] w_ptr, r_ptr;
+  reg [15:0] fifo[0:15];
   reg [15:0] data_out_temp;
   
   // Set Default values on reset.
@@ -198,10 +206,10 @@ module fifo (
       r_ptr <= r_ptr + 1;
     end
 
-    if(w_ptr == 9'd511)
+    if(w_ptr == 4'd15)
         w_ptr <= 0;
 
-    if(r_ptr == 9'd511)
+    if(r_ptr == 4'd15)
         r_ptr <= 0;
 
   end
