@@ -1,0 +1,187 @@
+Resource Report
+Microchip Technology Inc. - Microchip Libero Software Release v2023.1 (Version 2023.1.0.6)
+Date: Sun Feb 11 12:13:15 2024
+
+Device Selection
++--------------------------------+----------------+
+| Family                         | SmartFusion2   |
+| Device                         | M2S050         |
+| Package                        | 484 FBGA       |
+| Speed Grade                    | STD            |
+| Temp                           | -40:25:100     |
+| Voltage                        | 1.26:1.20:1.14 |
+| Core Voltage                   | 1.2V           |
+| Ramp Rate                      | 100ms Minimum  |
+| System Controller Suspend Mode | No             |
+| PLL Supply Voltage             | 2.5V           |
+| Default I/O technology         | LVCMOS 2.5V    |
+| Restrict Probe Pins            | No             |
+| Restrict SPI Pins              | No             |
++--------------------------------+----------------+
+
+Source Files
++---------+-------------------------------------------------------------------------------------------------+
+| Topcell | POEM_RS485_Controller                                                                           |
+| Format  | Verilog                                                                                         |
+| Source  | C:\Users\S-SPACE\Desktop\Pratik\Libero\POEM_RS485_Controller\synthesis\POEM_RS485_Controller.vm |
++---------+-------------------------------------------------------------------------------------------------+
+
+Options
++----------------------------------------------------+-------+
+| Enable Single Event Transient mitigation           | false |
+| Enable Design Separation Methodology               | false |
+| Limit the number of high fanout nets to display to | 10    |
++----------------------------------------------------+-------+
+
+Resource Usage
++---------------------------+------+-------+------------+
+| Type                      | Used | Total | Percentage |
++---------------------------+------+-------+------------+
+| 4LUT                      | 759  | 56340 | 1.35       |
+| DFF                       | 301  | 56340 | 0.53       |
+| I/O Register              | 0    | 801   | 0.00       |
+| User I/O                  | 5    | 267   | 1.87       |
+| -- Single-ended I/O       | 5    | 267   | 1.87       |
+| -- Differential I/O Pairs | 0    | 133   | 0.00       |
+| RAM64x18                  | 0    | 72    | 0.00       |
+| RAM1K18                   | 1    | 69    | 1.45       |
+| MACC                      | 0    | 72    | 0.00       |
+| Chip Globals              | 3    | 16    | 18.75      |
+| CCC                       | 1    | 6     | 16.67      |
+| RCOSC_25_50MHZ            | 1    | 1     | 100.00     |
+| RCOSC_1MHZ                | 0    | 1     | 0.00       |
+| XTLOSC                    | 0    | 1     | 0.00       |
+| MSS                       | 1    | 1     | 100.00     |
++---------------------------+------+-------+------------+
+
+Detailed Logic Resource Usage
++--------------------------+------+-----+
+| Type                     | 4LUT | DFF |
++--------------------------+------+-----+
+| Fabric Logic             | 723  | 265 |
+| RAM64x18 Interface Logic | 0    | 0   |
+| RAM1K18 Interface Logic  | 36   | 36  |
+| MACC Interface Logic     | 0    | 0   |
+| Total Used               | 759  | 301 |
++--------------------------+------+-----+
+
+MSS Resource Usage
++---------------+------+-------+
+| Type          | Used | Total |
++---------------+------+-------+
+| Cortex-M3*    | 1    | 1     |
+| eNVM (256KB)* | 1    | 1     |
+| eSRAM*        | 2    | 2     |
+| TIMER*        | 2    | 2     |
+| CAN           | 0    | 1     |
+| SPI           | 0    | 2     |
+| I2C           | 0    | 2     |
+| UART          | 1    | 2     |
+| USB           | 0    | 1     |
+| MAC           | 0    | 1     |
+| MDDR          | 0    | 1     |
+| HPDMA         | 1    | 1     |
+| PDMA          | 1    | 1     |
++---------------+------+-------+
+
+* These resources are always marked as used when you are using the MSS
+
+Detailed Carry Chains Resource Usage
++--------+------+
+| Length | Used |
+| 11     | 2    |
+| 32     | 6    |
+| Total  | 8    |
++--------+------+
+
+I/O Function
++-------------------------------+--------------+-------------+-----------------+
+| Type                          | w/o register | w/ register | w/ DDR register |
++-------------------------------+--------------+-------------+-----------------+
+| Input I/O                     | 2            | 0           | 0               |
+| Output I/O                    | 3            | 0           | 0               |
+| Bidirectional I/O             | 0            | 0           | 0               |
+| Differential Input I/O Pairs  | 0            | 0           | 0               |
+| Differential Output I/O Pairs | 0            | 0           | 0               |
++-------------------------------+--------------+-------------+-----------------+
+
+I/O Technology
++--------------+--------+------+-------+--------+---------------+
+| I/O Standard | Vddi   | Vref | Input | Output | Bidirectional |
++--------------+--------+------+-------+--------+---------------+
+| LVCMOS25     |  2.50v |  N/A |  2    |  3     |  0            |
++--------------+--------+------+-------+--------+---------------+
+
+Nets assigned to chip global resources
++--------+---------+----------------------------------------------------------------------------------------------------------------------+
+| Fanout | Type    | Name                                                                                                                 |
++--------+---------+----------------------------------------------------------------------------------------------------------------------+
+| 144    | INT_NET | Net   : POEM_RS485_Controller_sb_0/GL0_INST                                                                          |
+|        |         | Driver: POEM_RS485_Controller_sb_0/CCC_0/GL0_INST/U0_RGB1                                                            |
+|        |         | Source: NETLIST                                                                                                      |
+| 113    | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/baud_clk_0_o_clk                                           |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/baud_clk_0/o_clock_inferred_clock_RNI0FVB/U0_RGB1          |
+|        |         | Source: NETLIST                                                                                                      |
+| 10     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0_Tx_complete                                |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/Tx_complete_inferred_clock_RNI4ADC/U0_RGB1 |
+|        |         | Source: NETLIST                                                                                                      |
++--------+---------+----------------------------------------------------------------------------------------------------------------------+
+
+Nets assigned to row global resources
++--------+------+------+
+| Fanout | Type | Name |
++--------+------+------+
++--------+------+------+
+
+High fanout nets
++--------+---------+------------------------------------------------------------------------------------------------------------------------+
+| Fanout | Type    | Name                                                                                                                   |
++--------+---------+------------------------------------------------------------------------------------------------------------------------+
+| 43     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/un1_tx_enable_Z[1]                           |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/un1_tx_enable[1]                             |
+| 36     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_iso                  |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_iso            |
+| 35     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/N_1261_i                                     |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/un1_i_tx_24_19_RNI8MJ4VB1                    |
+| 33     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_2_iso                |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_2_iso          |
+| 33     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_1_iso                |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_1_iso          |
+| 33     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/VeRRptcNt014_RNIUG5I                         |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/_capl.VeRRptcNt014_RNIUG5I                   |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_iso_RNIL81A2         |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_iso_RNIL81A2   |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_1_iso_RNI1D811       |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_1_iso_RNI1D811 |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_2_iso_RNI54V34       |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_2_iso_RNI54V34 |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/VeRRptcNt0_0_sqmuxa_RNIO3RV1                 |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_RNIO3RV1           |
++--------+---------+------------------------------------------------------------------------------------------------------------------------+
+
+High fanout nets (through buffer trees)
++--------+---------+------------------------------------------------------------------------------------------------------------------------+
+| Fanout | Type    | Name                                                                                                                   |
++--------+---------+------------------------------------------------------------------------------------------------------------------------+
+| 43     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/un1_tx_enable_Z[1]                           |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/un1_tx_enable[1]                             |
+| 36     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_iso                  |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_iso            |
+| 35     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/N_1261_i                                     |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/un1_i_tx_24_19_RNI8MJ4VB1                    |
+| 33     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_2_iso                |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_2_iso          |
+| 33     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_1_iso                |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_1_iso          |
+| 33     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/VeRRptcNt014_RNIUG5I                         |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/_capl.VeRRptcNt014_RNIUG5I                   |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_iso_RNIL81A2         |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_iso_RNIL81A2   |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_1_iso_RNI1D811       |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_1_iso_RNI1D811 |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/VeRRptcNt0_0_sqmuxa_2_iso_RNI54V34       |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/RS_485_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_2_iso_RNI54V34 |
+| 32     | INT_NET | Net   : POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/VeRRptcNt0_0_sqmuxa_RNIO3RV1                 |
+|        |         | Driver: POEM_RS485_Controller_sb_0/Controller_Interface_0/Tx_Controller_0/_capp.VeRRptcNt0_0_sqmuxa_RNIO3RV1           |
++--------+---------+------------------------------------------------------------------------------------------------------------------------+
+

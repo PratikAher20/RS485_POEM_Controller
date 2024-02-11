@@ -1,0 +1,13 @@
+
+########			REPORT FOR HIGH FANOUT NETS			########
+
+CLOCK GLOBAL THRESHOLD - 2
+ASYNC GLOBAL THRESHOLD - 12
+GLOBAL THRESHOLD - 5000
+
+NET NAME                                                                          CLOCK LOADS     ASYNC RST LOADS     DATA LOADS     TOTAL FANOUT     GLOBAL BUFFER PRESENT
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+POEM_RS485_Controller_sb_0.GL0_INST                                               144             0                   0              144              YES                  
+POEM_RS485_Controller_sb_0.Controller_Interface_0.baud_clk_0_o_clk                113             0                   0              113              YES                  
+POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0_Tx_complete     10              0                   0              10               YES                  
+===========================================================================================================================================================================

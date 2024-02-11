@@ -1,0 +1,10 @@
+DESIGN=POEM_RS485_Controller
+DESDIR=C:\Users\S-SPACE\Desktop\Pratik\Libero\POEM_RS485_Controller\designer\POEM_RS485_Controller
+TARGET_DIR=C:\Users\S-SPACE\Desktop\Pratik\Libero\POEM_RS485_Controller\designer\POEM_RS485_Controller
+FAM=SmartFusion2
+DIE=PA4M5000_N
+PACKAGE=fg484
+PINRPT_BY_NAME=1
+PINRPT_BY_NUMBER=1
+BANK_REPORT=1
+IOREG_REPORT=1

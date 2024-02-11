@@ -1,0 +1,69 @@
+# Microsemi Corp.
+# Date: 2024-Feb-11 11:48:49
+Libero Release : v2023.1
+Libero Version : 2023.1.0.6
+Operating System Name : Windows 8
+Ram Size : 23.90 GB (usable)
+OS Type : 64-bit
+
+Environment Variables : 
+---------------------
+	ALLUSERSPROFILE=C:\ProgramData
+	APPDATA=C:\Users\S-SPACE\AppData\Roaming
+	BenchVueInstallDir=C:\Program Files (x86)\Keysight\BenchVue\
+	CommonProgramFiles=C:\Program Files (x86)\Common Files
+	CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+	CommonProgramW6432=C:\Program Files\Common Files
+	COMPUTERNAME=DESKTOP-S6GGU40
+	ComSpec=C:\Windows\system32\cmd.exe
+	DriverData=C:\Windows\System32\Drivers\DriverData
+	FPS_BROWSER_APP_PROFILE_STRING=Internet Explorer
+	FPS_BROWSER_USER_PROFILE_STRING=Default
+	HOMEDRIVE=C:
+	HOMEPATH=\Users\S-SPACE
+	IVIROOTDIR32=C:\Program Files (x86)\IVI Foundation\IVI\
+	IVIROOTDIR64=C:\Program Files\IVI Foundation\IVI\
+	KAL_LICENSE_MANAGER_BIN_PATH=C:\Program Files\Common Files\Keysight\License Manager 6\bin
+	KAL_LICENSE_MANAGER_CONFIG_PATH=C:\ProgramData\Keysight\Licensing\Configuration
+	LM_LICENSE_FILE=1702@172.20.48.13
+	LOCALAPPDATA=C:\Users\S-SPACE\AppData\Local
+	LOGONSERVER=\\DESKTOP-S6GGU40
+	MOSQUITTO_DIR=C:\Program Files\mosquitto
+	NUMBER_OF_PROCESSORS=40
+	OneDrive=C:\Users\S-SPACE\OneDrive
+	OS=Windows_NT
+	Path=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Microchip\xc8\v2.36\bin;C:\Program Files\Microchip\xc16\v2.00\bin;C:\Program Files\Keysight\IO Libraries Suite\bin;C:\Program Files\IVI Foundation\VISA\Win64\ktvisa;C:\Program Files\IVI Foundation\VISA\Win64\bin;C:\Program Files (x86)\Keysight\IO Libraries Suite\bin;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\ktvisa;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\bin;C:\Program Files (x86)\IVI Foundation\IVI\bin;C:\Program Files\IVI Foundation\IVI\bin;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin\;C:\Program Files\IVI Foundation\VISA\Win64\Bin\;C:\Program Files (x86)\IVI Foundation\VISA\winnt\agvisa;C:\Program Files\Git\cmd;C:\Program Files\MATLAB\R2022a\bin;C:\Program Files\PuTTY\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\usbipd-win\;C:\Ruby30-x64\bin;C:\Users\S-SPACE\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\PyCharm 2021.3.2\bin;;C:\Program Files\JetBrains\PyCharm Community Edition 2021.3.2\bin;;C:\Users\S-SPACE\AppData\Local\GitHubDesktop\bin;C:\Users\S-SPACE\AppData\Local\Programs\Microsoft VS Code\bin;C:\Microchip\Libero_SoC_v2023.1\SmartHLS-2023.1\SmartHLS\bin;
+	PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.RB;.RBW
+	PROCESSOR_ARCHITECTURE=x86
+	PROCESSOR_ARCHITEW6432=AMD64
+	PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 63 Stepping 2, GenuineIntel
+	PROCESSOR_LEVEL=6
+	PROCESSOR_REVISION=3f02
+	ProgramData=C:\ProgramData
+	ProgramFiles=C:\Program Files (x86)
+	ProgramFiles(x86)=C:\Program Files (x86)
+	ProgramW6432=C:\Program Files
+	PSModulePath=C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+	PUBLIC=C:\Users\Public
+	PyCharm=C:\Program Files\JetBrains\PyCharm 2021.3.2\bin;
+	PyCharm Community Edition=C:\Program Files\JetBrains\PyCharm Community Edition 2021.3.2\bin;
+	RUBYLIB=C:\cosmos-main\openc3\lib
+	RUBYOPT=-Eutf-8
+	SC_INSTALL_DIR=C:\Microchip\SoftConsole-v2021.1\CMSIS\V4.5\Include
+	SESSIONNAME=Console
+	SystemDrive=C:
+	SystemRoot=C:\Windows
+	TEMP=C:\Users\S-SPACE\AppData\Local\Temp
+	TMP=C:\Users\S-SPACE\AppData\Local\Temp
+	USERDOMAIN=DESKTOP-S6GGU40
+	USERDOMAIN_ROAMINGPROFILE=DESKTOP-S6GGU40
+	USERNAME=S-SPACE
+	USERPROFILE=C:\Users\S-SPACE
+	VXIPNPPATH=C:\Program Files (x86)\IVI Foundation\VISA\
+	VXIPNPPATH64=C:\Program Files\IVI Foundation\VISA\
+	windir=C:\Windows
+	AMHOME=C:\Microchip\Libero_SoC_v2023.1\Designer/am
+	HOME=C:\Users\S-SPACE
+	TCL_LIBRARY=C:\Microchip\Libero_SoC_v2023.1\Designer/lib/tcl8.5
+	SYN_WRXML=1
+	ACTEL_SW_DIR=C:\Microchip\Libero_SoC_v2023.1\Designer

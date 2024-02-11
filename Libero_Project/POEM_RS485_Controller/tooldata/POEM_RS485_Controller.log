@@ -1,0 +1,16 @@
+Project Name: POEM_RS485_Controller
+Location: C:\Users\S-SPACE\Desktop\Pratik\Libero\POEM_RS485_Controller
+Description: 
+Preferred HDL Type: Verilog
+
+#-----------------------------------------------------
+                  Device Details
+#-----------------------------------------------------
+
+Part Number    : M2S050-FG484I
+Family         : SmartFusion2
+Die            : M2S050
+Package        : 484 FBGA
+Speed          : STD
+Core Voltage   : 1.2
+Range          : IND

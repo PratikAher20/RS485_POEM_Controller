@@ -1,0 +1,4 @@
+CKID0001:@|S:POEM_RS485_Controller_sb_0.CCC_0.CCC_INST@|E:POEM_RS485_Controller_sb_0.POEM_RS485_Controller_sb_MSS_0.MSS_ADLIB_INST@|F:@syn_sample_clock_path==CKID0001@|M:ClockId0001 
+CKID0002:@|S:POEM_RS485_Controller_sb_0.Controller_Interface_0.baud_clk_0.o_clock@|E:POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.i_tx[5]@|F:@syn_sample_clock_path==CKID0002@|M:ClockId0002 
+CKID0003:@|S:POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.Tx_complete@|E:POEM_RS485_Controller_sb_0.Controller_Interface_0.RS_485_Controller_0.ram_raddr[0]@|F:@syn_sample_clock_path==CKID0003@|M:ClockId0003 
+CKID0004:@|S:POEM_RS485_Controller_sb_0.Controller_Interface_0.sequence_detector_0.detect@|E:POEM_RS485_Controller_sb_0.Controller_Interface_0.TPSRAM_C0_0.TPSRAM_C0_0.TPSRAM_C0_TPSRAM_C0_0_TPSRAM_R0C0@|F:@syn_sample_clock_path==CKID0004@|M:ClockId0004 

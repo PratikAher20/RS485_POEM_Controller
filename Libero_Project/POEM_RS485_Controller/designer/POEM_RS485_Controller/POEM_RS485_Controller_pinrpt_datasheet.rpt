@@ -1,0 +1,18 @@
+----------------------------------------------------------------
+-Pin Report - Date: Sun Feb 11 12:15:03 2024 Pinchecksum: NOT-AVAILABLE
+-Product: Designer
+-Release: v2023.1
+-Version: 2023.1.0.6
+-Design Name: POEM_RS485_Controller
+-Family: SmartFusion2
+-Die: M2S050
+-Package: 484 FBGA
+-----------------------------------------------------------------
+
+Port         |Pin |Fixed |Function                         |Bank     |I/O Std   |Direction                      |I/O state in Flash*Freeze mode |Resistor Pull                      |I/O available in Flash*Freeze mode |Schmitt Trigger |Odt_Static    |Odt Imp (Ohm)  |Low Power Exit |Input Delay |Slew         |Pre-Emphasis      |Output Drive (mA) |Output Load (pF) |
+-------------|----|------|---------------------------------|---------|----------|-------------------------------|-------------------------------|-----------------------------------|-----------------------------------|----------------|--------------|---------------|---------------|------------|-------------|------------------|------------------|-----------------|
+MMUART_0_RXD  C22  Yes    MSIO47PB1/MMUART_0_RXD/GPIO_28_B  Bank1     LVCMOS25   Input                           TRISTATE                        None                                No                                  Off              ---            ---             Off             Off          ---           ---                ---                ---               
+MMUART_0_TXD  D21  Yes    MSI46NB1/MMUART_0_TXD/GPIO_27_B   Bank1     LVCMOS25   Output                          TRISTATE                        None                                No                                  ---              ---            ---             ---             ---          SLOW          ---                4                  5                 
+Rx            F18  Yes    MSIO44NB1/MMUART_0_DSR/GPIO_20_B  Bank1     LVCMOS25   Input                           TRISTATE                        None                                No                                  Off              ---            ---             Off             Off          ---           ---                ---                ---               
+Tx            F21  Yes    MSIO43PB1/MMUART_0_RTS/GPIO_17_B  Bank1     LVCMOS25   Output                          TRISTATE                        None                                No                                  ---              ---            ---             ---             ---          SLOW          ---                4                  5                 
+Tx_Enable     F20  Yes    MSIO43NB1/MMUART_0_DTR/GPIO_18_B  Bank1     LVCMOS25   Output                          TRISTATE                        None                                No                                  ---              ---            ---             ---             ---          SLOW          ---                4                  5                 

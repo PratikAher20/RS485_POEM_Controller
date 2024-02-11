@@ -1,0 +1,16 @@
+
+. Module name, SLE, CFG, ARI1, BUFFER, MACC, RAM1K18, RAM64X18, GLOBAL, IO
+. POEM_RS485_Controller, 265, 513, 214, 0, 0, 1, 0, 3, 5
+.	. POEM_RS485_Controller_sb, 265, 513, 214, 0, 0, 1, 0, 3, 2
+.	.	. Controller_Interface, 265, 500, 214, 0, 0, 1, 0, 2, 0
+.	.	.	. RS_485_Controller, 146, 128, 118, 0, 0, 0, 0, 0, 0
+.	.	.	. TPSRAM_C0, 0, 0, 0, 0, 0, 1, 0, 0, 0
+.	.	.	.	. TPSRAM_C0_TPSRAM_C0_0_TPSRAM, 0, 0, 0, 0, 0, 1, 0, 0, 0
+.	.	.	. Tx_Controller, 101, 360, 96, 0, 0, 0, 0, 1, 0
+.	.	.	. baud_clk, 6, 7, 0, 0, 0, 0, 0, 1, 0
+.	.	.	. sequence_detector, 12, 5, 0, 0, 0, 0, 0, 0, 0
+.	.	. CoreAPB3_C0, 0, 2, 0, 0, 0, 0, 0, 0, 0
+.	.	.	. CoreAPB3_Z1, 0, 2, 0, 0, 0, 0, 0, 0, 0
+.	.	. POEM_RS485_Controller_sb_CCC_0_FCCC, 0, 0, 0, 0, 0, 0, 0, 1, 0
+.	.	. POEM_RS485_Controller_sb_FABOSC_0_OSC, 0, 0, 0, 0, 0, 0, 0, 0, 0
+.	.	. POEM_RS485_Controller_sb_MSS, 0, 11, 0, 0, 0, 0, 0, 0, 2

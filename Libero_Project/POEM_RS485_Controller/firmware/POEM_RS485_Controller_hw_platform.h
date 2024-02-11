@@ -1,0 +1,17 @@
+#ifndef POEM_RS485_Controller_HW_PLATFORM_H_
+#define POEM_RS485_Controller_HW_PLATFORM_H_
+/*****************************************************************************
+*
+*Created by Microsemi SmartDesign  Sun Feb 11 12:21:40 2024
+*
+*Memory map specification for peripherals in POEM_RS485_Controller
+*/
+
+/*-----------------------------------------------------------------------------
+* CM3 subsystem memory map
+* Initiator(s) for this subsystem: CM3 
+*---------------------------------------------------------------------------*/
+#define RS_485_CONTROLLER_0             0x50000000U
+
+
+#endif /* POEM_RS485_Controller_HW_PLATFORM_H_*/

@@ -1,0 +1,24 @@
+
+
+@S |Clock Optimization Summary
+
+
+#### START OF CLOCK OPTIMIZATION REPORT #####[
+
+Clock optimization not enabled
+0 non-gated/non-generated clock tree(s) driving 0 clock pin(s) of sequential element(s)
+4 gated/generated clock tree(s) driving 268 clock pin(s) of sequential element(s)
+0 instances converted, 268 sequential instances remain driven by gated/generated clocks
+
+============================================================================================================================================ Gated/Generated Clocks =============================================================================================================================================
+Clock Tree ID     Driving Element                                                                   Drive Element Type     Fanout     Sample Instance                                                                                                 Explanation                                                
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+@K:CKID0001       POEM_RS485_Controller_sb_0.CCC_0.CCC_INST                                         CCC                    144        POEM_RS485_Controller_sb_0.POEM_RS485_Controller_sb_MSS_0.MSS_ADLIB_INST                                        No gated clock conversion method for cell cell:work.MSS_050
+@K:CKID0002       POEM_RS485_Controller_sb_0.Controller_Interface_0.baud_clk_0.o_clock              SLE                    113        POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.i_tx[5]                                       No gated clock conversion method for cell cell:ACG4.SLE    
+@K:CKID0003       POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.Tx_complete     SLE                    10         POEM_RS485_Controller_sb_0.Controller_Interface_0.RS_485_Controller_0.ram_raddr[0]                              No gated clock conversion method for cell cell:ACG4.SLE    
+@K:CKID0004       POEM_RS485_Controller_sb_0.Controller_Interface_0.sequence_detector_0.detect      SLE                    1          POEM_RS485_Controller_sb_0.Controller_Interface_0.TPSRAM_C0_0.TPSRAM_C0_0.TPSRAM_C0_TPSRAM_C0_0_TPSRAM_R0C0     No gated clock conversion method for cell cell:ACG4.RAM1K18
+=================================================================================================================================================================================================================================================================================================================
+
+
+##### END OF CLOCK OPTIMIZATION REPORT ######]
+

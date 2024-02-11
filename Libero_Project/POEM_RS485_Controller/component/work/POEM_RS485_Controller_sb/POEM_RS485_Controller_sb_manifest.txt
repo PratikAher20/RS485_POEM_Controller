@@ -1,0 +1,27 @@
+Microchip Technology Inc. - Microchip Libero Software Release v2023.1 (Version 2023.1.0.6)
+
+Date      :  Sun Feb 11 12:12:03 2024
+Project   :  C:\Users\S-SPACE\Desktop\Pratik\Libero\POEM_RS485_Controller
+Component :  POEM_RS485_Controller_sb
+Family    :  SmartFusion2
+
+
+HDL source files for all Synthesis and Simulation tools:
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/work/POEM_RS485_Controller_sb/CCC_0/POEM_RS485_Controller_sb_CCC_0_FCCC.v
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/Actel/DirectCore/CoreResetP/7.1.100/rtl/vlog/core/coreresetp.v
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/Actel/DirectCore/CoreResetP/7.1.100/rtl/vlog/core/coreresetp_pcie_hotreset.v
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/work/POEM_RS485_Controller_sb/FABOSC_0/POEM_RS485_Controller_sb_FABOSC_0_OSC.v
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/work/POEM_RS485_Controller_sb/POEM_RS485_Controller_sb.v
+
+HDL source files for Synopsys SynplifyPro Synthesis tool:
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/Actel/SgCore/OSC/2.0.101/osc_comps.v
+
+HDL source files for Mentor Precision Synthesis tool:
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/Actel/SgCore/OSC/2.0.101/osc_comps_pre.v
+
+Stimulus files for all Simulation tools:
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/work/POEM_RS485_Controller_sb/subsystem.bfm
+
+Constraint files:
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/work/POEM_RS485_Controller_sb\CCC_0\POEM_RS485_Controller_sb_CCC_0_FCCC.sdc
+    C:/Users/S-SPACE/Desktop/Pratik/Libero/POEM_RS485_Controller/component/work/POEM_RS485_Controller_sb\FABOSC_0\POEM_RS485_Controller_sb_FABOSC_0_OSC.sdc

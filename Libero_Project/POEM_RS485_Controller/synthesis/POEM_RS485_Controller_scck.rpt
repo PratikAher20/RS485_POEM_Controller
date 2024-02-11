@@ -1,0 +1,62 @@
+
+Copyright (C) 1994-2022 Synopsys, Inc.
+This Synopsys software and all associated documentation are proprietary to Synopsys, Inc.
+and may only be used pursuant to the terms and conditions of a written license agreement
+with Synopsys, Inc. All other use, reproduction, modification, or distribution of the
+Synopsys software or the associated documentation is strictly prohibited.
+Tool: Synplify Pro (R)
+Build: T-2022.09M-SP2
+Install: C:\Microchip\Libero_SoC_v2023.1\SynplifyPro
+OS: Windows 10 or later
+Hostname: DESKTOP-S6GGU40
+
+Implementation : synthesis
+
+# Written on Sun Feb 11 12:12:48 2024
+
+##### FILES SYNTAX CHECKED ##############################################
+Constraint File(s):      "C:\Users\S-SPACE\Desktop\Pratik\Libero\POEM_RS485_Controller\designer\POEM_RS485_Controller\synthesis.fdc"
+
+#Run constraint checker to find more issues with constraints.
+#########################################################################
+
+
+
+No issues found in constraint syntax.
+
+
+
+Clock Summary
+*************
+
+          Start                                                                       Requested     Requested     Clock        Clock          Clock
+Level     Clock                                                                       Frequency     Period        Type         Group          Load 
+---------------------------------------------------------------------------------------------------------------------------------------------------
+0 -       POEM_RS485_Controller_sb_CCC_0_FCCC|GL0_net_inferred_clock                  100.0 MHz     10.000        inferred     (multiple)     181  
+                                                                                                                                                   
+0 -       baud_clk|o_clock_inferred_clock                                             100.0 MHz     10.000        inferred     (multiple)     114  
+                                                                                                                                                   
+0 -       POEM_RS485_Controller_sb_FABOSC_0_OSC|RCOSC_25_50MHZ_CCC_inferred_clock     100.0 MHz     10.000        inferred     (multiple)     15   
+                                                                                                                                                   
+0 -       Tx_Controller|Tx_complete_inferred_clock                                    100.0 MHz     10.000        inferred     (multiple)     10   
+                                                                                                                                                   
+0 -       sequence_detector|detect_inferred_clock                                     100.0 MHz     10.000        inferred     (multiple)     1    
+===================================================================================================================================================
+
+
+Clock Load Summary
+******************
+
+                                                                            Clock     Source                                                                                       Clock Pin                                                                                                             Non-clock Pin                                                                            Non-clock Pin                                                                             
+Clock                                                                       Load      Pin                                                                                          Seq Example                                                                                                           Seq Example                                                                              Comb Example                                                                              
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+POEM_RS485_Controller_sb_CCC_0_FCCC|GL0_net_inferred_clock                  181       POEM_RS485_Controller_sb_0.CCC_0.CCC_INST.GL0(CCC)                                           POEM_RS485_Controller_sb_0.POEM_RS485_Controller_sb_MSS_0.MSS_ADLIB_INST.CLK_BASE                                     -                                                                                        POEM_RS485_Controller_sb_0.CCC_0.GL0_INST.I(BUFG)                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+baud_clk|o_clock_inferred_clock                                             114       POEM_RS485_Controller_sb_0.Controller_Interface_0.baud_clk_0.o_clock.Q[0](dffe)              POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.VeRRptcNt0[31:0].C                                  -                                                                                        -                                                                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+POEM_RS485_Controller_sb_FABOSC_0_OSC|RCOSC_25_50MHZ_CCC_inferred_clock     15        POEM_RS485_Controller_sb_0.FABOSC_0.I_RCOSC_25_50MHZ.CLKOUT(RCOSC_25_50MHZ)                  POEM_RS485_Controller_sb_0.CORERESETP_0.release_sdif0_core.C                                                          -                                                                                        POEM_RS485_Controller_sb_0.FABOSC_0.I_RCOSC_25_50MHZ_FAB.A(RCOSC_25_50MHZ_FAB)            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+Tx_Controller|Tx_complete_inferred_clock                                    10        POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.Tx_complete.Q[0](dffe)     POEM_RS485_Controller_sb_0.Controller_Interface_0.RS_485_Controller_0.ram_raddr[9:0].C                                -                                                                                        -                                                                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+sequence_detector|detect_inferred_clock                                     1         POEM_RS485_Controller_sb_0.Controller_Interface_0.sequence_detector_0.detect.Q[0](dff)       POEM_RS485_Controller_sb_0.Controller_Interface_0.TPSRAM_C0_0.TPSRAM_C0_0.TPSRAM_C0_TPSRAM_C0_0_TPSRAM_R0C0.A_CLK     POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.VeRRptcNt0[31:0].E     POEM_RS485_Controller_sb_0.Controller_Interface_0.Tx_Controller_0.un1_seq_detect.I[0](inv)
+============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
