@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<SynplifyOutput>
-	<result>Success</result>
-	<design>POEM_RS485_Controller</design>
-	<target_verilog>C:\Users\S-SPACE\Desktop\Pratik\Libero\POEM_RS485_Controller\synthesis\POEM_RS485_Controller.vm</target_verilog>
-</SynplifyOutput>

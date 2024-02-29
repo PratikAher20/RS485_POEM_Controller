@@ -17,7 +17,7 @@ output wire [15:0] data_in,
 output reg [9:0] ram_waddr,
 output reg [9:0] ram_raddr,
 output reg PREADY,
-output reg[9:0] PRDATA,
+output [9:0] PRDATA,
 output Tx,
 
 output reg wr, enable,
@@ -28,6 +28,7 @@ output wire[15:0] byte_in
 
 reg[15:0] data_temp_in = 15'b0;
 reg [15:0] byte_temp_in = 15'b0;
+reg [9:0] op_rdata = 10'b0000000000;
 
 
 wire wr_enable, rd_enable;
@@ -39,6 +40,7 @@ always @(posedge PCLK) begin
     if(!rst_tx) begin
         wr = 0;
         ram_waddr <= 10'b0000000000;
+        ram_raddr <= 10'b0000000000;
         
     end
 
@@ -66,53 +68,69 @@ always @(posedge PCLK) begin
                 PREADY = 0;
             end
         end
-    else if(rd_enable) begin
-        
-        if(PADDR == 8'h08)
-        begin
+        else if(rd_enable) begin
             PREADY = 1;
-            repeat(2)
-                @(posedge PCLK)
-            PRDATA = ram_waddr;   // Return the number of empty bytes from the queue.
-            PREADY = 0;
+            if(PADDR == 8'h08)
             
-        end
+            begin
+                repeat(1)
+                    @(posedge PCLK)
+                op_rdata <= 16'hAB;   // Return the number of empty bytes from the queue.
+                PREADY = 0;
+                
+            end
 
-        if(PADDR == 8'h0C)
-        begin
-            PREADY = 1;
-            repeat(2)
-                @(posedge PCLK)
-            PRDATA = ram_raddr;   // Return the number of empty bytes from the queue.
-            PREADY = 0;
+            else if(PADDR == 8'h0C)
+
+            begin
+                repeat(1)
+                    @(posedge PCLK)
+                op_rdata <= ram_raddr;   // Return the number of empty bytes from the queue.
+                PREADY = 0;
+                
+            end
             
+            else if(PADDR == 8'h10)
+            begin
+                repeat(1)
+                    @(posedge PCLK)
+                op_rdata <= ram_waddr;   // Return the number of empty bytes from the queue.
+                PREADY = 0;
+            
+            end
         end
-
-    end
+        else if(Tx_complete) begin
+            if(ram_raddr == 10'd1023)begin
+                ram_raddr <= 10'b0000000000;
+                ram_raddr <= ram_raddr + 1'b1;
+            end
+            else begin
+                ram_raddr <= ram_raddr + 1'b1;
+            end
+        end
     end
     
 end
 
 assign data_in = data_temp_in;
+assign PRDATA = op_rdata;
 
-
-always @(posedge Tx_complete) begin
-     if(!rst_tx)begin
-        ram_raddr <= 10'b0000000000;
-    end
-    else begin
+//always @(posedge Tx_complete) begin
+  //   if(!rst_tx)begin
+    //    ram_raddr <= 10'b0000000000;
+    //end
+    //else begin
         
-        if(ram_raddr == 10'd1023)begin
-            ram_raddr <= 0;
-            ram_raddr <= ram_raddr + 1'b1;
-        end
-        else begin
-            ram_raddr <= ram_raddr + 1'b1;
-        end
-    end
-end
+     //   if(ram_raddr == 10'd1023)begin
+       //     ram_raddr <= 0;
+         //   ram_raddr <= ram_raddr + 1'b1;
+        //end
+        //else begin
+          //  ram_raddr <= ram_raddr + 1'b1;
+        //end
+    //end
+//end
 
 
 
 endmodule
-

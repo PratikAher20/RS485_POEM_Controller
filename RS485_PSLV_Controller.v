@@ -99,9 +99,10 @@ module baud_clk(input i_clk, output wire o_clk);
     reg o_clock = 1;
     reg[5:0] count = 6'd0;
 
+
     always @(posedge i_clk) begin
         count <= count + 5'd1;
-        if(count >= 6'd24) begin     // Choose the value of count for changing the
+        if(count >= 6'd6) begin     // Choose the value of count for changing the
             o_clock <= ~o_clock;   // baud clock given the master clock.  
             count <= 6'd0;
 
@@ -117,13 +118,12 @@ module sequence_detector(
     input clk,
     input reset,
     input Rx,
-    output wire detected,
-    output reg[10:0] state
+    output wire detected
 );
    
-    reg sync_flag =0;
     reg detect = 1'b0;
 
+    reg sync_flag =0;
     function [7:0]shifter(input reg [7:0] Slave_Addr);
    
         integer i;
@@ -136,7 +136,7 @@ module sequence_detector(
     parameter Slave_Addr = 8'h01;
     parameter slave_addr = shifter(Slave_Addr);
     reg[10:0] seq = {1'b0, slave_addr, 1'b1, 1'b1};
-   // reg [10:0] state = 0;  // State register to store the current sequence
+    reg [10:0] state = 0;  // State register to store the current sequence
     wire o_clock;
 
     baud_clk b1(.i_clk(clk), .o_clk(o_clock));
@@ -174,7 +174,9 @@ module sequence_detector(
     end
 
     assign detected = detect;
+   
 endmodule
+
 
 module transmitter_with_detector(
     input clk,
@@ -196,9 +198,9 @@ module transmitter_with_detector(
     initial reset = 0;
     // initial Tx_Enable = 0;
    
-    sequence_detector detector(.clk(clk), .reset(reset), .Rx(Rx), .detected(sequence_detected), .state(state));
+    //sequence_detector detector(.clk(clk), .reset(reset), .Rx(Rx), .detected(sequence_detected), .state(state));
 
-    Tx_Controller t1(.clk(clk), .valid(valid), .seq_detect(sequence_detected), .rst(rst_tx), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
+    //Tx_Controller t1(.clk(clk), .valid(valid), .seq_detect(sequence_detected), .rst(rst_tx), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
 
 
 endmodule
