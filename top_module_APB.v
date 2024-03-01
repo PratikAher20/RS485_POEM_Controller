@@ -73,9 +73,10 @@ always @(posedge PCLK) begin
             if(PADDR == 8'h08)
             
             begin
+                op_rdata <= 16'hAB;
                 repeat(1)
                     @(posedge PCLK)
-                op_rdata <= 16'hAB;   // Return the number of empty bytes from the queue.
+                   // Return the number of empty bytes from the queue.
                 PREADY = 0;
                 
             end
@@ -83,18 +84,20 @@ always @(posedge PCLK) begin
             else if(PADDR == 8'h0C)
 
             begin
+                op_rdata <= ram_raddr;
                 repeat(1)
                     @(posedge PCLK)
-                op_rdata <= ram_raddr;   // Return the number of empty bytes from the queue.
+                   // Return the number of empty bytes from the queue.
                 PREADY = 0;
                 
             end
             
             else if(PADDR == 8'h10)
             begin
+                op_rdata <= ram_waddr; 
                 repeat(1)
                     @(posedge PCLK)
-                op_rdata <= ram_waddr;   // Return the number of empty bytes from the queue.
+                  // Return the number of empty bytes from the queue.
                 PREADY = 0;
             
             end
