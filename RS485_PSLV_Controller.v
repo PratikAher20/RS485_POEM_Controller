@@ -102,7 +102,7 @@ module baud_clk(input i_clk, output wire o_clk);
 
     always @(posedge i_clk) begin
         count <= count + 5'd1;
-        if(count >= 6'd6) begin     // Choose the value of count for changing the
+        if(count >= 6'd25) begin     // Choose the value of count for changing the
             o_clock <= ~o_clock;   // baud clock given the master clock.  
             count <= 6'd0;
 
