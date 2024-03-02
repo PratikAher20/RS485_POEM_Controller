@@ -1,14 +1,14 @@
+RS485 Codes with State diagram
 module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, input[15:0] data_in, output wire Tx_Enable, output wire Tx, output reg Tx_complete);
 
     // reg[15:0] data = data_in;
     reg tx_reg = 1;
-    reg[31:0] i_tx = 32'h00000000;
+    integer i_tx = 0;
     // initial Tx = 1;
     // reg rst;
     // initial rst = 0;
     initial Tx_complete = 0;
     reg tx_enable = 0;
-    initial tx_enable = 0;
     // initial Tx_Enable = 0;
     wire o_clock;
 
@@ -19,15 +19,13 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
         if(!rst) begin
             tx_reg <= 1;
             tx_enable <= 0;
-            i_tx = 0;
+            // i_tx <= 0;
         end
 
         else begin
 
-            if(seq_detect == 1)begin
-                repeat(4)
-                    @(posedge clk);
-
+            if(seq_detect == 1)begin         
+                
                 tx_enable <= 1;
 
             end
@@ -35,6 +33,8 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
 
             if(tx_enable == 1) begin
 
+                // repeat(1)
+                //     @(posedge clk);
                   
                 i_tx = i_tx + 1;
 
@@ -46,8 +46,8 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
                     // end
                     // 0 : i_tx = i_tx + 1;
                     1 : begin
-                        repeat(2)
-                            @(posedge clk);
+                        // repeat(1)
+                        //     @(posedge clk);
                         Tx_complete <= 0;
                         tx_reg <= 0;
                     end
@@ -74,17 +74,16 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
                     22 : tx_reg <= 1;
                     23 : begin
                         // rst <= 1;
-                        i_tx = 32'h00000000;
+                        i_tx = 0;
                         Tx_complete <= 1;
                         tx_enable <= 0;
                     end
 
-                    default: tx_reg <= 1;
+                    default: begin
+                        tx_reg <= 1;
+                        tx_enable <= 0;
+                    end
                 endcase
-            end
-
-            else begin
-                tx_reg <= 1;
             end
         end
     end
@@ -94,22 +93,27 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
 
 endmodule
 
-module baud_clk(input i_clk, output wire o_clk);
+module baud_clk(input i_clk, input reset, output wire o_clk);
    
-    reg o_clock = 1;
-    reg[5:0] count = 6'd0;
-
+    reg[5:0] count;
+    reg o_c;
 
     always @(posedge i_clk) begin
-        count <= count + 5'd1;
-        if(count >= 6'd25) begin     // Choose the value of count for changing the
-            o_clock <= ~o_clock;   // baud clock given the master clock.  
-            count <= 6'd0;
+        if(!reset)begin
+            count <= 1'b0;
+            o_c <= 1'b0;
+        end
+        else begin
+            count <= count + 1;
+            if(count >= 6'd1) begin     // Choose the value of count for changing the
+                o_c <= ~o_c;   // baud clock given the master clock.  
+                count <= 6'd0;
 
+            end
         end
     end
        
-    assign o_clk = o_clock;
+    assign o_clk = o_c;
 
 endmodule
 
@@ -121,7 +125,7 @@ module sequence_detector(
     output wire detected
 );
    
-    reg detect = 1'b0;
+    reg detect;
 
     reg sync_flag =0;
     function [7:0]shifter(input reg [7:0] Slave_Addr);
@@ -135,43 +139,116 @@ module sequence_detector(
 
     parameter Slave_Addr = 8'h01;
     parameter slave_addr = shifter(Slave_Addr);
+    parameter bit_per_address = 8'd8;
     reg[10:0] seq = {1'b0, slave_addr, 1'b1, 1'b1};
     reg [10:0] state = 0;  // State register to store the current sequence
+    reg [7:0] bits_rx;
     wire o_clock;
 
-    baud_clk b1(.i_clk(clk), .o_clk(o_clock));
+    parameter IDLE = 3'b000;
+    parameter RX_START_BIT = 3'b001;
+    parameter RX_DATA_BITS = 3'b010;
+    parameter RX_STOP_BIT = 3'b011;
+    reg[2:0] uart_state;
 
-    always @(Rx) begin
-        if(Rx == 0) begin
-            if(sync_flag == 0)begin
-               // state <= {state[9:0], Rx};
-                sync_flag <= 1;
-            end
+    baud_clk b1(.i_clk(clk), .reset(reset), .o_clk(o_clock));
+
+    // always @(Rx) begin
+    //     if(Rx == 0) begin
+    //         if(sync_flag == 0)begin
+    //            // state <= {state[9:0], Rx};
+    //             sync_flag <= 1;
+    //         end
+    //         // if (bits_rx == 8'd11)begin
+    //         //     sync_flag <= 11'd0;
+    //         // end
+    //     end
+    //     else begin
+    //         if(bits_rx > 8'd8) begin
+    //             sync_flag <= 0;
+    //         end
+    //     end
+    // end
+
+    always @(posedge o_clock) begin
+
+        if(reset == 1)begin
+            case (uart_state)
+                IDLE: begin
+                    detect <= 1'b0;
+                    state <= 11'b0;
+                    bits_rx <= 8'd0;
+                    sync_flag <= 1'b0;
+                    if(Rx == 1'b0) begin
+                        uart_state <= RX_START_BIT;
+                        state <= {state[9:0], 1'b0};
+                        sync_flag <= 1'b1;
+                    end
+                    else begin
+                        uart_state <= IDLE;
+                    end                    
+                end
+                RX_START_BIT: begin
+                    state <= {state[9:0], Rx}; 
+                    bits_rx = bits_rx + 8'b1;
+                    if(bits_rx > 8'd10) begin
+                        // uart_state <= RX_DATA_BITS;
+                         if(state == seq)begin
+                            detect <= 1'b1;
+                            repeat(2)
+                                @(posedge clk);
+                            uart_state <= IDLE;
+                        end
+                        else begin
+                            detect <= 1'b0;
+                            uart_state <= IDLE;
+                        end
+                    end
+                    else begin
+                        uart_state <= RX_START_BIT;
+                    end
+                end
+                // RX_DATA_BITS: begin
+                //     if(state == seq)begin
+                //         detect <= 1'b1;
+                //         uart_state <= IDLE;
+                //     end
+                //     else begin
+                //         detect <= 1'b0;
+                //         uart_state <= IDLE;
+                //     end
+                // end
+                default: begin
+                    detect <= 1'b0;
+                    uart_state <= IDLE;
+                end
+            endcase
         end
         else begin
-            if(state == seq) begin
-                //sync_flag <= 0;
-            end
+            uart_state <= IDLE;
+            detect <= 0;
+            bits_rx <= 0;
         end
+    
     end
 
-    always @(posedge clk) begin
-        // if (sync_flag == 0 && Rx == 0) begin
-        //     detected <= 0;
-        //     sync_flag = 1;
-        // end else begin
-       
-        if(sync_flag)begin
-            state <= {state[9:0], Rx};  // Shift in the new input bit
-            if (state == seq) begin  // Check if the sequence is detected
-                detect <= 1'b1;
-                //sync_flag <= 0;
-            end else begin
-                detect <= 1'b0;
-            end
-        end
-        // end
-    end
+
+        //Old version
+    //     if(sync_flag)begin
+    //         state <= {state[9:0], Rx};  // Shift in the new input bit
+    //         bits_rx = bits_rx + 8'd1;
+    //     end
+    //     else begin
+    //         if(state == seq)begin       // Check if the sequence is detected
+    //             detect <= 1'b1;
+    //             if (bits_rx > bit_per_address )begin
+    //                 state <= 11'd0;
+    //                 bits_rx <= 8'd0;
+    //             end
+    //         end
+    //     end
+        
+    // end
 
     assign detected = detect;
    
@@ -180,14 +257,13 @@ endmodule
 
 module transmitter_with_detector(
     input clk,
-    input valid,
     input Rx,
+    input rst_tx,
     input [15:0] byte_in,
     output wire Tx_complete,
     output wire Tx_Enable,
     output wire Tx,
-    output sequence_detected,
-    output[10:0] state
+    output sequence_detected
 );
 
     reg reset;
@@ -198,9 +274,9 @@ module transmitter_with_detector(
     initial reset = 0;
     // initial Tx_Enable = 0;
    
-    //sequence_detector detector(.clk(clk), .reset(reset), .Rx(Rx), .detected(sequence_detected), .state(state));
+    sequence_detector detector(.clk(clk), .reset(rst_tx), .Rx(Rx), .detected(sequence_detected));
 
-    //Tx_Controller t1(.clk(clk), .valid(valid), .seq_detect(sequence_detected), .rst(rst_tx), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
+    Tx_Controller t1(.clk(clk), .seq_detect(sequence_detected), .rst(rst_tx), .data_in(byte_in), .Tx_Enable(Tx_Enable), .Tx(Tx), .Tx_complete(Tx_complete));
 
 
 endmodule

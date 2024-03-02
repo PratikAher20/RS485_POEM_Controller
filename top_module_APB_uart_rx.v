@@ -9,19 +9,13 @@ input rst_tx,
 input seq_detect,
 input Tx_complete,
 
-output [15:0] data_out,
-
-
 
 output wire [15:0] data_in,
 output reg [9:0] ram_waddr,
 output reg [9:0] ram_raddr,
 output reg PREADY,
 output [9:0] PRDATA,
-output Tx,
-
-output reg wr, enable,
-output wire[15:0] byte_in
+output reg wr
 
 );
 
@@ -40,7 +34,6 @@ always @(posedge PCLK) begin
     if(!rst_tx) begin
         wr = 0;
         ram_waddr <= 10'b0000000000;
-        ram_raddr <= 10'b0000000000;
         
     end
 
@@ -102,15 +95,15 @@ always @(posedge PCLK) begin
             
             end
         end
-        // else if(Tx_complete) begin
-        //     if(ram_raddr == 10'd1023)begin
-        //         ram_raddr <= 10'b0000000000;
-        //         ram_raddr <= ram_raddr + 1'b1;
-        //     end
-        //     else begin
-        //         ram_raddr <= ram_raddr + 1'b1;
-        //     end
-        // end
+       // else if(Tx_complete) begin
+         //   if(ram_raddr == 10'd1023)begin
+         //       ram_raddr <= 10'b0000000000;
+         //       ram_raddr <= ram_raddr + 1'b1;
+         //   end
+         //   else begin
+         //       ram_raddr <= ram_raddr + 1'b1;
+         //   end
+      //  end
     end
     
 end
