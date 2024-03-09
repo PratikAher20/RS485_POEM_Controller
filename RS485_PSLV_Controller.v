@@ -228,7 +228,7 @@ module sequence_detector(
                 end
                 
                RX_DETECTED_BIT: begin
-                    if(clk_counts >= 3*(clk_per_bit - 1)) begin
+                    if(clk_counts >= (clk_per_bit - 1)) begin
                         uart_state <= IDLE;
                     end    
                     
@@ -239,14 +239,14 @@ module sequence_detector(
                     end
                  
                 default: begin
-                    //detect <= 1'b0;
+                    detect <= 1'b0;
                     uart_state <= IDLE;
                 end
             endcase
         end
         else begin
             uart_state <= IDLE;
-            //detect <= 0;
+            detect <= 0;
             bits_rx <= 0;
             clk_counts <= 0;
             state <= 11'd0;
