@@ -40,7 +40,6 @@ always @(posedge PCLK) begin
     if(!rst_tx) begin
         wr = 0;
         ram_waddr <= 10'b0000000000;
-        ram_raddr <= 10'b0000000000;
         
     end
 
