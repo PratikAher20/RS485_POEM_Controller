@@ -10,6 +10,8 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
     reg tx_enable = 0;
     // initial Tx_Enable = 0;
     wire o_clock;
+    reg[5:0] tx_clk_counts;
+    parameter clk_per_bit = 8'd25;
 
     //baud_clk b1(.i_clk(clk), .o_clk(o_clock));
        
@@ -18,6 +20,7 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
         if(!rst) begin
             tx_reg <= 1;
             tx_enable <= 0;
+            tx_clk_counts <= 6'd0;
             i_tx <= 0;
         end
 
@@ -29,60 +32,67 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
 
             end
 
+            if(tx_clk_counts >= (clk_per_bit - 1))begin
+                tx_clk_counts <= 0;
+            
+                if(tx_enable == 1) begin
 
-            if(tx_enable == 1) begin
+                    // repeat(1)
+                    //     @(posedge clk);
+                      
+                    i_tx <= i_tx + 1;
 
-                // repeat(1)
-                //     @(posedge clk);
-                  
-                i_tx <= i_tx + 1;
+                    case (i_tx)
+                        // 0: begin
+                        //     @(posedge Tx_Enable) begin
+                        //         rst = 0;
+                        //     end
+                        // end
+                        // 0 : i_tx = i_tx + 1;
+                        1 : begin
+                            // repeat(1)
+                            //     @(posedge clk);
+                            Tx_complete <= 0;
+                            tx_reg <= 0;
+                        end
+                        2 : tx_reg <= data_in[0];
+                        3 : tx_reg <= data_in[1];
+                        4 : tx_reg <= data_in[2];
+                        5 : tx_reg <= data_in[3];
+                        6 : tx_reg <= data_in[4];
+                        7 : tx_reg <= data_in[5];
+                        8 : tx_reg <= data_in[6];
+                        9 : tx_reg <= data_in[7];
+                        10 : tx_reg <= 0;
+                        11 : tx_reg <= 1;
+                        12 : tx_reg <= 0;
+                        13 : tx_reg <= data_in[8];
+                        14 : tx_reg <= data_in[9];
+                        15 : tx_reg <= data_in[10];
+                        16 : tx_reg <= data_in[11];
+                        17 : tx_reg <= data_in[12];
+                        18 : tx_reg <= data_in[13];
+                        19 : tx_reg <= data_in[14];
+                        20 : tx_reg <= data_in[15];
+                        21 : tx_reg <= 0;
+                        22 : tx_reg <= 1;
+                        23 : begin
+                            // rst <= 1;
+                            i_tx <= 0;
+                            Tx_complete <= 1;
+                            tx_enable <= 0;
+                        end
 
-                case (i_tx)
-                    // 0: begin
-                    //     @(posedge Tx_Enable) begin
-                    //         rst = 0;
-                    //     end
-                    // end
-                    // 0 : i_tx = i_tx + 1;
-                    1 : begin
-                        // repeat(1)
-                        //     @(posedge clk);
-                        Tx_complete <= 0;
-                        tx_reg <= 0;
-                    end
-                    2 : tx_reg <= data_in[0];
-                    3 : tx_reg <= data_in[1];
-                    4 : tx_reg <= data_in[2];
-                    5 : tx_reg <= data_in[3];
-                    6 : tx_reg <= data_in[4];
-                    7 : tx_reg <= data_in[5];
-                    8 : tx_reg <= data_in[6];
-                    9 : tx_reg <= data_in[7];
-                    10 : tx_reg <= 0;
-                    11 : tx_reg <= 1;
-                    12 : tx_reg <= 0;
-                    13 : tx_reg <= data_in[8];
-                    14 : tx_reg <= data_in[9];
-                    15 : tx_reg <= data_in[10];
-                    16 : tx_reg <= data_in[11];
-                    17 : tx_reg <= data_in[12];
-                    18 : tx_reg <= data_in[13];
-                    19 : tx_reg <= data_in[14];
-                    20 : tx_reg <= data_in[15];
-                    21 : tx_reg <= 0;
-                    22 : tx_reg <= 1;
-                    23 : begin
-                        // rst <= 1;
-                        i_tx <= 0;
-                        Tx_complete <= 1;
-                        tx_enable <= 0;
-                    end
-
-                    default: begin
-                        tx_reg <= 1;
-                        //tx_enable <= 0;
-                    end
-                endcase
+                        default: begin
+                            tx_reg <= 1;
+                            //tx_enable <= 0;
+                        end
+                    endcase
+                end
+            end
+            
+            else begin
+                tx_clk_counts <= tx_clk_counts + 6'd1;
             end
         end
     end
@@ -104,7 +114,7 @@ module baud_clk(input i_clk, output wire o_clk);
        // end
         //else begin
             count <= count + 1;
-            if(count >= 5'd24) begin     // Choose the value of count for changing the
+            if(count >= 5'd25) begin     // Choose the value of count for changing the
                 o_c <= ~o_c;   // baud clock given the master clock.  
                 count <= 5'd0;
             end
@@ -138,7 +148,7 @@ module sequence_detector(
     parameter Slave_Addr = 8'h01;
     parameter slave_addr = shifter(Slave_Addr);
     parameter bit_per_address = 8'd8;
-    parameter clk_per_bit = 8'd50;
+    parameter clk_per_bit = 8'd25;
     //reg[10:0] seq = {1'b0, slave_addr, 1'b1, 1'b1};
     reg[10:0] seq;
     reg [10:0] state = 0;  // State register to store the current sequence
