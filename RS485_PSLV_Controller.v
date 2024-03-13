@@ -130,6 +130,8 @@ module sequence_detector(
     input clk,
     input reset,
     input Rx,
+    input [7:0] sa,
+    input [7:0] clk_per_bit,
     output wire detected
 );
    
@@ -144,11 +146,13 @@ module sequence_detector(
         end
        
     endfunction
+    
+    reg[7:0] slave_addr;
+    reg[7:0] Slave_Addr;
 
-    parameter Slave_Addr = 8'h01;
-    parameter slave_addr = shifter(Slave_Addr);
-    parameter bit_per_address = 8'd8;
-    parameter clk_per_bit = 8'd25;
+    //parameter Slave_Addr = 8'h02;
+    //parameter slave_addr = shifter(Slave_Addr);
+    //parameter clk_per_bit = 8'd25;
     //reg[10:0] seq = {1'b0, slave_addr, 1'b1, 1'b1};
     reg[10:0] seq;
     reg [10:0] state = 0;  // State register to store the current sequence
@@ -187,6 +191,9 @@ module sequence_detector(
         if(reset == 1)begin
             case (uart_state)
                 IDLE: begin
+                    Slave_Addr <= sa;
+                    slave_addr <= shifter(Slave_Addr);
+                    seq <= {1'b0, slave_addr, 1'b1, 1'b1};
                     detect <= 1'b0;
                     state <= 11'b0;
                     bits_rx <= 8'd0;
@@ -260,7 +267,7 @@ module sequence_detector(
             bits_rx <= 0;
             clk_counts <= 0;
             state <= 11'd0;
-            seq = {1'b0, slave_addr, 1'b1, 1'b1};
+            seq <= {1'b0, slave_addr, 1'b1, 1'b1};
         end
     
     end

@@ -33,7 +33,8 @@ reg [15:0] byte_temp_in = 15'b0;
 reg [9:0] op_rdata = 10'b0000000000;
 reg[5:0] clk_counts_raddr;
 reg tx_complete_flg;
-
+reg[7:0] sl_addr;
+reg[7:0] clkperbit;
 wire wr_enable, rd_enable;
 assign wr_enable = (PENABLE && PWRITE && PSEL);
 assign rd_enable = (PENABLE && !PWRITE && PSEL);
@@ -47,31 +48,54 @@ always @(posedge PCLK) begin
         ram_raddr <= 10'd0;
         clk_counts_raddr <= 6'd0;
         tx_complete_flg <= 0;
+        sl_addr <= 8'd0;
+        clkperbit <= 8'd0;
     end
 
     else begin
         if(wr_enable)begin
             PREADY = 1;
+            
             if(PADDR == 8'h00)
-            begin
-                // for (i = 0; i<16; i++ ) begin
-                //     data_in[i] <= PWDATA[i];
-                // end
-                data_temp_in <= PWDATA;
-                if(ram_waddr == 10'd1023) begin
-                    ram_waddr <= 0;
-                    ram_waddr <= ram_waddr + 1'b1;
+                begin
+                    // for (i = 0; i<16; i++ ) begin
+                    //     data_in[i] <= PWDATA[i];
+                    // end
+                    data_temp_in <= PWDATA;
+                    if(ram_waddr == 10'd1023) begin
+                        ram_waddr <= 0;
+                        ram_waddr <= ram_waddr + 1'b1;
+                    end
+                    else begin
+                        ram_waddr <= ram_waddr + 1'b1;
+                    end
+                    // fill_data(PWDATA, data_in);
+                    wr = 1;
+                    repeat(1)
+                        @(posedge PCLK);
+                    wr = 0;
+                    PREADY = 0;
                 end
-                else begin
-                    ram_waddr <= ram_waddr + 1'b1;
+            
+            else if(PADDR == 8'h14)
+                begin
+                    sl_addr <= PWDATA;
+                    wr = 1;
+                    repeat(1)
+                        @(posedge PCLK);
+                    wr = 0;
+                    PREADY = 0;
                 end
-                // fill_data(PWDATA, data_in);
-                wr = 1;
-                repeat(1)
-                    @(posedge PCLK);
-                wr = 0;
-                PREADY = 0;
-            end
+                
+            else if(PADDR == 8'h18)
+                begin
+                    clkperbit <= PWDATA;
+                    wr = 1;
+                    repeat(1)
+                        @(posedge PCLK);
+                    wr = 0;
+                    PREADY = 0;
+                end
         end
         else if(rd_enable) begin
             PREADY = 1;
@@ -129,6 +153,8 @@ always @(posedge PCLK) begin
     
 end
 
+assign slave_addr = sl_addr;
+assign clks_per_bit = clkperbit;
 assign data_in = data_temp_in;
 assign PRDATA = op_rdata;
 
