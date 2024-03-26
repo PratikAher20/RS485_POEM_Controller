@@ -1,4 +1,13 @@
-module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, input[15:0] data_in, output wire Tx_Enable, output wire Tx, output reg Tx_complete);
+module Tx_Controller(
+    input wire clk, 
+    input wire seq_detect, 
+    input wire rst, 
+    input[15:0] data_in, 
+    input [7:0] clk_per_bit,
+    output wire Tx_Enable, 
+    output wire Tx, 
+    output reg Tx_complete
+);
 
     // reg[15:0] data = data_in;
     reg tx_reg = 1;
@@ -11,7 +20,7 @@ module Tx_Controller(input wire clk, input wire seq_detect, input wire rst, inpu
     // initial Tx_Enable = 0;
     wire o_clock;
     reg[5:0] tx_clk_counts;
-    parameter clk_per_bit = 8'd25;
+    //parameter clk_per_bit = 8'd25;
 
     //baud_clk b1(.i_clk(clk), .o_clk(o_clock));
        
