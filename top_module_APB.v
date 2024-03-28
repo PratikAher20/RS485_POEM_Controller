@@ -8,6 +8,7 @@ input [15:0] PWDATA,
 input rst_tx,
 input seq_detect,
 input Tx_complete,
+input REN,
 
 output [15:0] data_out,
 
@@ -22,7 +23,8 @@ output [9:0] PRDATA,
 output Tx,
 
 output reg wr, enable,
-output Data_Storage_Detected,
+output SRAM_EMPTY_Detected,
+output SRAM_FULL_Detected,
 output [7:0] slave_addr,
 output [7:0] clks_per_bit
 
@@ -38,13 +40,13 @@ reg[7:0] clkperbit;
 wire wr_enable, rd_enable;
 assign wr_enable = (PENABLE && PWRITE && PSEL);
 assign rd_enable = (PENABLE && !PWRITE && PSEL);
-assign Data_Storage_Detected = (ram_waddr - ram_raddr - 9'd3 <= 9'd1) ? 1:0 ;
-
+assign SRAM_EMPTY_Detected = ((ram_waddr - ram_raddr - 10'd1 < 10'd1) || (10'd1023 - ram_raddr + ram_waddr - 10'd1 < 10'd1)) ? 1:0 ;
+assign SRAM_FULL_Detected = (((ram_raddr - ram_waddr - 10'd1 < 10'd1) && (ram_raddr - ram_waddr >= 0)) || (10'd1023 - ram_waddr + ram_raddr - 10'd1 < 10'd1)) ? 1:0 ;
 
 always @(posedge PCLK) begin
     if(!rst_tx) begin
         wr = 0;
-        ram_waddr <= 10'd3;
+        ram_waddr <= 10'd2;
         ram_raddr <= 10'd0;
         clk_counts_raddr <= 6'd0;
         tx_complete_flg <= 0;
@@ -135,12 +137,14 @@ always @(posedge PCLK) begin
         
         if(Tx_complete) begin
             if(tx_complete_flg == 0) begin
-                if(ram_raddr == 10'd1023)begin
-                     ram_raddr <= 10'b0000000000;
-                     ram_raddr <= ram_raddr + 1'b1;
-                 end
-                else begin
-                        ram_raddr <= ram_raddr + 1'b1;
+                if(REN == 1) begin
+                    if(ram_raddr == 10'd1023)begin
+                         ram_raddr <= 10'b0000000000;
+                         ram_raddr <= ram_raddr + 1'b1;
+                    end
+                    else begin
+                            ram_raddr <= ram_raddr + 1'b1;
+                    end
                 end
             end
             tx_complete_flg <= 1;
