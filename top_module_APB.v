@@ -9,7 +9,6 @@ input rst_tx,
 input seq_detect,
 input Tx_complete,
 input REN,
-
 output [15:0] data_out,
 
 
@@ -26,7 +25,11 @@ output reg wr, enable,
 output SRAM_EMPTY_Detected,
 output SRAM_FULL_Detected,
 output [7:0] slave_addr,
-output [7:0] clks_per_bit
+output [7:0] CMD_ID,
+output [5:0] NUM_BYTES,
+output [7:0] clks_per_bit,
+output RCLK_CMD,
+output [7:0] R_ADDR_CMD
 
 );
 
@@ -37,7 +40,13 @@ reg[5:0] clk_counts_raddr;
 reg tx_complete_flg;
 reg[7:0] sl_addr;
 reg[7:0] clkperbit;
+reg[7:0] cmd_id;
+reg[5:0] num_bytes;
+reg rclk_cmd;
+reg [7:0] r_addr_cmd;
 wire wr_enable, rd_enable;
+assign CMD_ID = cmd_id;
+assign NUM_BYTES = num_bytes;
 assign wr_enable = (PENABLE && PWRITE && PSEL);
 assign rd_enable = (PENABLE && !PWRITE && PSEL);
 assign SRAM_EMPTY_Detected = ((ram_waddr - ram_raddr - 10'd1 < 10'd1) || (10'd1023 - ram_raddr + ram_waddr - 10'd1 < 10'd1)) ? 1:0 ;
@@ -52,6 +61,8 @@ always @(posedge PCLK) begin
         tx_complete_flg <= 0;
         sl_addr <= 8'd0;
         clkperbit <= 8'd0;
+        r_addr_cmd <= 8'd0;
+        rclk_cmd <= 1'b0;
     end
 
     else begin
@@ -98,6 +109,26 @@ always @(posedge PCLK) begin
                     wr = 0;
                     PREADY = 0;
                 end
+                
+            else if(PADDR == 8'h1C)
+                begin
+                    cmd_id <= PWDATA;
+                    wr = 1;
+                    repeat(1)
+                        @(posedge PCLK);
+                    wr = 0;
+                    PREADY = 0;
+                end
+                
+            else if(PADDR == 8'h20)
+                begin
+                    num_bytes <= PWDATA;
+                    wr = 1;
+                    repeat(1)
+                        @(posedge PCLK);
+                    wr = 0;
+                    PREADY = 0;
+                end
         end
         else if(rd_enable) begin
             PREADY = 1;
@@ -133,6 +164,19 @@ always @(posedge PCLK) begin
             
             end
             
+           // else if(PADDR == 8'h24)
+            //begin
+              //  r_addr_cmd <= r_addr_cmd + 8'd1;
+                //rclk_cmd <= 1;
+                //op_rdata <= RD_CMD; 
+                //repeat(1)
+                //@(posedge PCLK)
+                   //Return the number of empty bytes from the queue.
+                //PREADY = 0;
+                //rclk_cmd <= 0;
+            
+            //end
+            
         end
         
         if(Tx_complete) begin
@@ -161,6 +205,7 @@ assign slave_addr = sl_addr;
 assign clks_per_bit = clkperbit;
 assign data_in = data_temp_in;
 assign PRDATA = op_rdata;
+assign R_ADDR_CMD = r_addr_cmd;
 
 //always @(posedge Tx_complete) begin
   //   if(!rst_tx)begin

@@ -182,7 +182,7 @@ module CMD_Detector (
     assign CMD_WADDR = cmd_waddr;
     assign CMD_WCLK = cmd_wclk;
     assign PARAM_Byte = shifter(param_reg);
-    assign CMD_Detected = cmd_detect;
+    assign CMD_Detected = cmd_detect_flg;
     
 
 endmodule
