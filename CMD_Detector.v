@@ -3,6 +3,7 @@ module CMD_Detector (
     input reset,
     input Rx,
     input [7:0] PAYLOAD_ID,
+    input [7:0] clk_per_bit,
     output wire CMD_Detected,
     output CMD_WCLK,
     output[7:0] PARAM_Byte,
@@ -33,7 +34,7 @@ module CMD_Detector (
     reg [7:0] cmd_byte;
     
     // parameter bit_per_address = 8'd8;
-    parameter clk_per_bit = 8'd50;
+    //parameter clk_per_bit = 8'd50;
     reg[11:0] cmd_seq;
     reg [10:0] cmd_state = 0;  // State register to store the current sequence
     reg [7:0] cmd_bits_rx;
@@ -106,7 +107,7 @@ module CMD_Detector (
                                     cmd_state <= 11'd0;
                                     cmd_waddr <= cmd_waddr + 5'd1;
                                     num_params <= num_params + 8'd1;
-                                    if(num_params == NUM_PARAM_TO_RX - 1)begin
+                                    if(num_params == 29 - 1)begin
                                         cmd_clk_counts <= 6'd0;
                                         cmd_uart_state <= CMD_PARAM_RX;
                                         num_params <= 8'd0;
@@ -118,18 +119,32 @@ module CMD_Detector (
 
                                 else if(chk_tc_cntr_flg == 1)begin
                                     tc_cntr_curr <= cmd_state[9:2];
+                                    param_reg <= cmd_state[9:2];
+                                    cmd_wclk <= 1;
+                                    cmd_waddr <= cmd_waddr + 8'd1;
+                                    //xor_op <= tc_cntr_curr ^ tc_cntr_prev;
+                                    //if(xor_op != 8'h00) begin
+                                      //  cmd_wclk <= 1;
+                                        //cmd_waddr <= cmd_waddr + 8'd1;
+                                    //end
                                     cmd_uart_state <= CHK_TC_CNTR;
                                     cmd_clk_counts <= 6'd0;
                                 end
 
                                 else if(chk_tc_len_flg == 1) begin
                                     NUM_PARAM_TO_RX <= shifter(cmd_state[9:2]);
+                                    param_reg <= cmd_state[9:2];
+                                    cmd_wclk <= 1;
+                                    cmd_waddr <= cmd_waddr + 8'd1;
                                     cmd_uart_state <= CHK_TC_LEN;
                                     cmd_clk_counts <= 6'd0;
                                 end
 
                                 else if(chk_pay_id_flg == 1) begin
                                     pay_id <= shifter(cmd_state[9:2]);
+                                    param_reg <= cmd_state[9:2];
+                                    cmd_wclk <= 1;
+                                    cmd_waddr <= cmd_waddr + 8'd1;
                                     cmd_uart_state <= CHK_PAY_ID;
                                     cmd_clk_counts <= 6'd0;
                                 end
@@ -137,6 +152,7 @@ module CMD_Detector (
                                 else begin
                                     if(cmd_state == cmd_seq)begin
                                         chk_tc_cntr_flg <= 1;
+                                        cmd_waddr <= 8'd0;
                                         cmd_uart_state <= CMD_DETECTED_BIT;
                                         cmd_clk_counts <= 6'd0;
                                     end
