@@ -153,7 +153,7 @@ module CMD_Detector (
                                     if(cmd_state == cmd_seq)begin
                                         chk_tc_cntr_flg <= 1;
                                         cmd_waddr <= 8'd0;
-                                        cmd_uart_state <= CMD_DETECTED_BIT;
+                                        cmd_uart_state <= CMD_IDLE;
                                         cmd_clk_counts <= 6'd0;
                                     end
                                     else begin
@@ -172,15 +172,15 @@ module CMD_Detector (
                     end
                 end
 
-                CMD_DETECTED_BIT: begin
-                    if(cmd_clk_counts >= (clk_per_bit - 1) )begin
-                        cmd_uart_state <= CMD_IDLE;
-                    end
-                    else begin
-                        cmd_clk_counts <= cmd_clk_counts + 1'b1;
-                        cmd_uart_state <= CMD_DETECTED_BIT;
-                    end
-                end
+                //CMD_DETECTED_BIT: begin
+                  //  if(cmd_clk_counts >= (clk_per_bit - 1) )begin
+                    //    cmd_uart_state <= CMD_IDLE;
+                    //end
+                    //else begin
+                      //  cmd_clk_counts <= cmd_clk_counts + 1'b1;
+                        //cmd_uart_state <= CMD_DETECTED_BIT;
+                    //end
+                //end
 
                 CHK_TC_CNTR: begin
                     if(cmd_clk_counts >= (clk_per_bit - 1) )begin
