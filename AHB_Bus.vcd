@@ -1,0 +1,173 @@
+$date
+	Sat Feb 10 10:51:23 2024
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module AHB_tb $end
+$var wire 3 ! HBURST [2:0] $end
+$var wire 4 " HPROT [3:0] $end
+$var wire 3 # HSIZE [2:0] $end
+$var wire 1 $ VALID $end
+$var wire 2 % RESP_err [1:0] $end
+$var wire 1 & HWRITE $end
+$var wire 32 ' HWDATA [31:0] $end
+$var wire 2 ( HTRANS [1:0] $end
+$var wire 32 ) HADDR [31:0] $end
+$var wire 16 * DATAOUT [15:0] $end
+$var wire 1 + AHB_BUSY $end
+$var reg 1 , HCLK $end
+$var reg 16 - HRDATA [15:0] $end
+$var reg 1 . HREADY $end
+$var reg 1 / HRESETn $end
+$var reg 2 0 HRESP [1:0] $end
+$var reg 1 1 READ $end
+$scope module bus1 $end
+$var wire 3 2 HBURST [2:0] $end
+$var wire 1 , HCLK $end
+$var wire 4 3 HPROT [3:0] $end
+$var wire 16 4 HRDATA [15:0] $end
+$var wire 1 . HREADY $end
+$var wire 1 / HRESETn $end
+$var wire 2 5 HRESP [1:0] $end
+$var wire 3 6 HSIZE [2:0] $end
+$var wire 1 1 READ $end
+$var wire 2 7 RESP_err [1:0] $end
+$var parameter 32 8 ADDR $end
+$var parameter 5 9 Data_size $end
+$var parameter 3 : Idle_1 $end
+$var parameter 3 ; Read_FIC_0 $end
+$var parameter 3 < Read_FIC_1 $end
+$var parameter 3 = Read_FIC_2 $end
+$var parameter 3 > Read_FIC_3 $end
+$var reg 1 + AHB_BUSY $end
+$var reg 16 ? DATAOUT [15:0] $end
+$var reg 32 @ HADDR [31:0] $end
+$var reg 2 A HTRANS [1:0] $end
+$var reg 32 B HWDATA [31:0] $end
+$var reg 1 & HWRITE $end
+$var reg 1 $ VALID $end
+$var reg 3 C ahb_fsm_current_state [2:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+b100 >
+b11 =
+b10 <
+b1 ;
+b0 :
+b0 9
+b100000000000001000000000000000 8
+$end
+#0
+$dumpvars
+b0 C
+b0 B
+b0 A
+b0 @
+b0 ?
+b0 7
+b1 6
+b0 5
+b0 4
+b11 3
+b0 2
+11
+b0 0
+0/
+1.
+b0 -
+0,
+0+
+b0 *
+b0 )
+b0 (
+b0 '
+1&
+b0 %
+0$
+b1 #
+b11 "
+b0 !
+$end
+#3
+1/
+#5
+1+
+0&
+b100000000000001000000000000000 )
+b100000000000001000000000000000 @
+b1 C
+1,
+#10
+0,
+#15
+b10 C
+1&
+b10 (
+b10 A
+1,
+0.
+#20
+0,
+#25
+1,
+#30
+0,
+#35
+1,
+#40
+0,
+#45
+1,
+#50
+0,
+#55
+b11 C
+b0 (
+b0 A
+b0 )
+b0 @
+1,
+1.
+b1010101111001101 -
+b1010101111001101 4
+#60
+0,
+#65
+0+
+b100 C
+1$
+b1010101111001101 *
+b1010101111001101 ?
+1,
+#70
+0,
+#75
+b0 C
+1,
+#80
+0,
+#85
+1+
+0&
+b100000000000001000000000000000 )
+b100000000000001000000000000000 @
+b1 C
+0$
+1,
+#90
+0,
+#95
+b10 C
+1&
+b10 (
+b10 A
+1,
+#100
+0,

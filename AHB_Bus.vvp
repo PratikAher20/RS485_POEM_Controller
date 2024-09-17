@@ -1,0 +1,190 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1539-g2693dd32b)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "C:\iverilog\lib\ivl\system.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
+S_000001744445bd00 .scope module, "AHB_BUS" "AHB_BUS" 2 21;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "HCLK";
+    .port_info 1 /INPUT 1 "HRESETn";
+    .port_info 2 /INPUT 1 "READ";
+    .port_info 3 /OUTPUT 16 "DATAOUT";
+    .port_info 4 /OUTPUT 32 "HADDR";
+    .port_info 5 /OUTPUT 2 "HTRANS";
+    .port_info 6 /OUTPUT 1 "HWRITE";
+    .port_info 7 /OUTPUT 3 "HSIZE";
+    .port_info 8 /OUTPUT 3 "HBURST";
+    .port_info 9 /OUTPUT 4 "HPROT";
+    .port_info 10 /OUTPUT 32 "HWDATA";
+    .port_info 11 /INPUT 16 "HRDATA";
+    .port_info 12 /INPUT 1 "HREADY";
+    .port_info 13 /INPUT 2 "HRESP";
+    .port_info 14 /OUTPUT 2 "RESP_err";
+    .port_info 15 /OUTPUT 1 "AHB_BUSY";
+    .port_info 16 /OUTPUT 1 "VALID";
+P_00000174444e27f0 .param/l "ADDR" 0 2 54, C4<00100000000000001000000000000000>;
+P_00000174444e2828 .param/l "Data_size" 0 2 65, C4<00000>;
+P_00000174444e2860 .param/l "Idle_1" 0 2 52, C4<000>;
+P_00000174444e2898 .param/l "Read_FIC_0" 0 2 52, C4<001>;
+P_00000174444e28d0 .param/l "Read_FIC_1" 0 2 52, C4<010>;
+P_00000174444e2908 .param/l "Read_FIC_2" 0 2 52, C4<011>;
+P_00000174444e2940 .param/l "Read_FIC_3" 0 2 52, C4<100>;
+o0000017444521188 .functor BUFZ 2, C4<zz>; HiZ drive
+L_000001744445ea80 .functor BUFZ 2, o0000017444521188, C4<00>, C4<00>, C4<00>;
+v00000174444e2e50_0 .var "AHB_BUSY", 0 0;
+v000001744445be90_0 .var "DATAOUT", 15 0;
+v0000017444459b10_0 .var "HADDR", 31 0;
+L_000001744456ed68 .functor BUFT 1, C4<000>, C4<0>, C4<0>, C4<0>;
+v00000174444e2980_0 .net "HBURST", 2 0, L_000001744456ed68;  1 drivers
+o0000017444521098 .functor BUFZ 1, C4<z>; HiZ drive
+v00000174444e2a20_0 .net "HCLK", 0 0, o0000017444521098;  0 drivers
+L_000001744456edb0 .functor BUFT 1, C4<0011>, C4<0>, C4<0>, C4<0>;
+v00000174444e2ac0_0 .net "HPROT", 3 0, L_000001744456edb0;  1 drivers
+o00000174445210f8 .functor BUFZ 16, C4<zzzzzzzzzzzzzzzz>; HiZ drive
+v00000174444e2b60_0 .net "HRDATA", 15 0, o00000174445210f8;  0 drivers
+o0000017444521128 .functor BUFZ 1, C4<z>; HiZ drive
+v00000174445140f0_0 .net "HREADY", 0 0, o0000017444521128;  0 drivers
+o0000017444521158 .functor BUFZ 1, C4<z>; HiZ drive
+v0000017444514190_0 .net "HRESETn", 0 0, o0000017444521158;  0 drivers
+v0000017444514230_0 .net "HRESP", 1 0, o0000017444521188;  0 drivers
+L_000001744456edf8 .functor BUFT 1, C4<001>, C4<0>, C4<0>, C4<0>;
+v00000174445142d0_0 .net "HSIZE", 2 0, L_000001744456edf8;  1 drivers
+v0000017444514370_0 .var "HTRANS", 1 0;
+v000001744456de70_0 .var "HWDATA", 31 0;
+v000001744456e5f0_0 .var "HWRITE", 0 0;
+o0000017444521278 .functor BUFZ 1, C4<z>; HiZ drive
+v000001744456ea50_0 .net "READ", 0 0, o0000017444521278;  0 drivers
+v000001744456e9b0_0 .net "RESP_err", 1 0, L_000001744445ea80;  1 drivers
+v000001744456dd30_0 .var "VALID", 0 0;
+v000001744456eaf0_0 .var "ahb_fsm_current_state", 2 0;
+E_0000017444504c60/0 .event negedge, v0000017444514190_0;
+E_0000017444504c60/1 .event posedge, v00000174444e2a20_0;
+E_0000017444504c60 .event/or E_0000017444504c60/0, E_0000017444504c60/1;
+    .scope S_000001744445bd00;
+T_0 ;
+    %wait E_0000017444504c60;
+    %load/vec4 v0000017444514190_0;
+    %cmpi/e 0, 0, 1;
+    %jmp/0xz  T_0.0, 4;
+    %pushi/vec4 0, 0, 32;
+    %assign/vec4 v0000017444459b10_0, 0;
+    %pushi/vec4 0, 0, 2;
+    %assign/vec4 v0000017444514370_0, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v000001744456e5f0_0, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v000001744456dd30_0, 0;
+    %pushi/vec4 0, 0, 32;
+    %assign/vec4 v000001744456de70_0, 0;
+    %pushi/vec4 0, 0, 16;
+    %assign/vec4 v000001744445be90_0, 0;
+    %pushi/vec4 0, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v00000174444e2e50_0, 0;
+    %jmp T_0.1;
+T_0.0 ;
+    %load/vec4 v000001744456eaf0_0;
+    %dup/vec4;
+    %pushi/vec4 0, 0, 3;
+    %cmp/u;
+    %jmp/1 T_0.2, 6;
+    %dup/vec4;
+    %pushi/vec4 1, 0, 3;
+    %cmp/u;
+    %jmp/1 T_0.3, 6;
+    %dup/vec4;
+    %pushi/vec4 2, 0, 3;
+    %cmp/u;
+    %jmp/1 T_0.4, 6;
+    %dup/vec4;
+    %pushi/vec4 3, 0, 3;
+    %cmp/u;
+    %jmp/1 T_0.5, 6;
+    %dup/vec4;
+    %pushi/vec4 4, 0, 3;
+    %cmp/u;
+    %jmp/1 T_0.6, 6;
+    %jmp T_0.7;
+T_0.2 ;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v000001744456dd30_0, 0;
+    %load/vec4 v000001744456ea50_0;
+    %cmpi/e 1, 0, 1;
+    %jmp/0xz  T_0.8, 4;
+    %pushi/vec4 1, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+    %pushi/vec4 536903680, 0, 32;
+    %assign/vec4 v0000017444459b10_0, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v000001744456e5f0_0, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v00000174444e2e50_0, 0;
+    %jmp T_0.9;
+T_0.8 ;
+    %pushi/vec4 0, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+T_0.9 ;
+    %jmp T_0.7;
+T_0.3 ;
+    %pushi/vec4 2, 0, 2;
+    %assign/vec4 v0000017444514370_0, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v000001744456e5f0_0, 0;
+    %pushi/vec4 2, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+    %jmp T_0.7;
+T_0.4 ;
+    %load/vec4 v00000174445140f0_0;
+    %cmpi/e 0, 0, 1;
+    %jmp/0xz  T_0.10, 4;
+    %pushi/vec4 2, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+    %jmp T_0.11;
+T_0.10 ;
+    %pushi/vec4 0, 0, 32;
+    %assign/vec4 v0000017444459b10_0, 0;
+    %pushi/vec4 0, 0, 2;
+    %assign/vec4 v0000017444514370_0, 0;
+    %pushi/vec4 3, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+T_0.11 ;
+    %jmp T_0.7;
+T_0.5 ;
+    %load/vec4 v00000174445140f0_0;
+    %cmpi/e 0, 0, 1;
+    %jmp/0xz  T_0.12, 4;
+    %pushi/vec4 3, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v00000174444e2e50_0, 0;
+    %jmp T_0.13;
+T_0.12 ;
+    %load/vec4 v00000174444e2b60_0;
+    %assign/vec4 v000001744445be90_0, 0;
+    %pushi/vec4 1, 0, 1;
+    %assign/vec4 v000001744456dd30_0, 0;
+    %pushi/vec4 4, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+    %pushi/vec4 0, 0, 1;
+    %assign/vec4 v00000174444e2e50_0, 0;
+T_0.13 ;
+    %jmp T_0.7;
+T_0.6 ;
+    %pushi/vec4 0, 0, 3;
+    %assign/vec4 v000001744456eaf0_0, 0;
+    %jmp T_0.7;
+T_0.7 ;
+    %pop/vec4 1;
+T_0.1 ;
+    %jmp T_0;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 3;
+    "N/A";
+    "<interactive>";
+    "AHB_Bus.v";
